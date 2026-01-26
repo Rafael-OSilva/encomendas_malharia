@@ -157,6 +157,15 @@
             background-color: #219653;
         }
         
+        .btn-info {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background-color: #2980b9;
+        }
+        
         .buttons-container {
             display: flex;
             gap: 15px;
@@ -298,6 +307,53 @@
             padding-top: 3mm;
         }
         
+        /* Estilos para crédito */
+        .credito-section {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e8f4fd;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .credito-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .credito-label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .credito-valor {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #27ae60;
+        }
+        
+        .credito-zero {
+            color: #e74c3c;
+        }
+        
+        .credito-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-credito {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+        
+        .credito-detalhes {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
         /* Estilos específicos para impressão */
         @media print {
             body * {
@@ -365,6 +421,17 @@
                 transform: scale(0.8);
                 transform-origin: top center;
             }
+            
+            .credito-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .credito-actions {
+                width: 100%;
+                flex-direction: column;
+            }
         }
         
         @media (max-width: 480px) {
@@ -399,6 +466,10 @@
                     <input type="text" id="customer-phone" placeholder="(11) 99999-9999">
                 </div>
                 <div class="form-group">
+                    <label for="customer-credito">Crédito Disponível (R$)</label>
+                    <input type="text" id="customer-credito" placeholder="0,00" value="0,00">
+                </div>
+                <div class="form-group">
                     <label for="order-date">Data da Encomenda</label>
                     <input type="date" id="order-date">
                 </div>
@@ -429,8 +500,8 @@
                         <option value="Camiseta">Camiseta</option>
                         <option value="Calça">Calça</option>
                         <option value="Bermuda">Bermuda</option>
-                        <option value="Moletom">Casaco</option>
-                        <option value="Uniforme">Uniforme KIT</option>
+                        <option value="Casaco">Casaco</option>
+                        <option value="Uniforme KIT">Uniforme KIT</option>
                         <option value="Outro">Outro</option>
                     </select>
                 </div>
@@ -485,8 +556,43 @@
                         <td id="total-amount" style="font-weight: bold;">R$ 0,00</td>
                         <td></td>
                     </tr>
+                    <tr>
+                        <td colspan="4" style="text-align: right; font-weight: bold;">(-) Crédito:</td>
+                        <td id="credito-usado" style="font-weight: bold; color: #e74c3c;">R$ 0,00</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="text-align: right; font-weight: bold;">Total Final:</td>
+                        <td id="total-final" style="font-weight: bold; color: #27ae60; font-size: 1.1rem;">R$ 0,00</td>
+                        <td></td>
+                    </tr>
                 </tfoot>
             </table>
+            
+            <!-- Seção de Crédito -->
+            <div class="credito-section">
+                <div class="credito-info">
+                    <div>
+                        <span class="credito-label">Crédito Disponível:</span>
+                        <span id="credito-disponivel" class="credito-valor">R$ 0,00</span>
+                    </div>
+                    <div class="credito-actions">
+                        <button id="usar-credito-btn" class="btn btn-info btn-credito" disabled>
+                            <i class="fas fa-money-bill-wave"></i> Usar Crédito
+                        </button>
+                        <button id="limpar-credito-btn" class="btn btn-secondary btn-credito" disabled>
+                            <i class="fas fa-undo"></i> Limpar Uso
+                        </button>
+                        <button id="ajustar-credito-btn" class="btn btn-success btn-credito">
+                            <i class="fas fa-edit"></i> Ajustar Crédito
+                        </button>
+                    </div>
+                </div>
+                <div class="credito-detalhes">
+                    <p id="credito-mensagem">Este cliente não possui crédito disponível.</p>
+                    <p id="credito-restante" style="display: none;">Após usar crédito, restará: <strong id="credito-restante-valor">R$ 0,00</strong></p>
+                </div>
+            </div>
         </div>
         
         <div class="buttons-container">
@@ -513,15 +619,34 @@
     <!-- Container para impressão -->
     <div id="print-container" class="print-section"></div>
     
+    <!-- Modal para ajustar crédito -->
+    <div id="modal-credito" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content" style="background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 400px;">
+            <h3 style="margin-top: 0; color: #2c3e50;">Ajustar Crédito do Cliente</h3>
+            <div class="form-group">
+                <label for="novo-credito">Novo Valor de Crédito (R$)</label>
+                <input type="text" id="novo-credito" placeholder="0,00" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+            </div>
+            <div id="modal-mensagem" style="margin: 10px 0; padding: 10px; border-radius: 4px; display: none;"></div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button id="cancelar-credito-btn" class="btn btn-secondary" style="flex: 1;">Cancelar</button>
+                <button id="confirmar-credito-btn" class="btn btn-primary" style="flex: 1;">Confirmar</button>
+            </div>
+        </div>
+    </div>
+    
     <script>
         // Dados da encomenda
         let orderItems = [];
         let orderId = Math.floor(1000 + Math.random() * 9000);
+        let creditoUsado = 0;
+        let creditoDisponivel = 0;
         
         // Elementos do formulário
         const customerNameInput = document.getElementById('customer-name');
         const customerCpfInput = document.getElementById('customer-cpf');
         const customerPhoneInput = document.getElementById('customer-phone');
+        const customerCreditoInput = document.getElementById('customer-credito');
         const orderDateInput = document.getElementById('order-date');
         const schoolNameInput = document.getElementById('school-name');
         const studentNameInput = document.getElementById('student-name');
@@ -529,6 +654,17 @@
         const itemSizeSelect = document.getElementById('item-size');
         const itemQuantityInput = document.getElementById('item-quantity');
         const itemPriceInput = document.getElementById('item-price');
+        
+        // Elementos de crédito
+        const creditoDisponivelSpan = document.getElementById('credito-disponivel');
+        const creditoUsadoCell = document.getElementById('credito-usado');
+        const totalFinalCell = document.getElementById('total-final');
+        const usarCreditoBtn = document.getElementById('usar-credito-btn');
+        const limparCreditoBtn = document.getElementById('limpar-credito-btn');
+        const ajustarCreditoBtn = document.getElementById('ajustar-credito-btn');
+        const creditoMensagem = document.getElementById('credito-mensagem');
+        const creditoRestanteDiv = document.getElementById('credito-restante');
+        const creditoRestanteValor = document.getElementById('credito-restante-valor');
         
         // Botões
         const addItemBtn = document.getElementById('add-item-btn');
@@ -538,6 +674,13 @@
         const clearFormBtn = document.getElementById('clear-form-btn');
         const closePreviewBtn = document.getElementById('close-preview-btn');
         const printPreviewBtn = document.getElementById('print-preview-btn');
+        
+        // Elementos do modal
+        const modalCredito = document.getElementById('modal-credito');
+        const novoCreditoInput = document.getElementById('novo-credito');
+        const cancelarCreditoBtn = document.getElementById('cancelar-credito-btn');
+        const confirmarCreditoBtn = document.getElementById('confirmar-credito-btn');
+        const modalMensagem = document.getElementById('modal-mensagem');
         
         // Tabela de itens
         const itemsList = document.getElementById('items-list');
@@ -564,28 +707,24 @@
         
         // Função para converter string de preço para número
         function parsePrice(priceString) {
-            // Remove R$, pontos e substitui vírgula por ponto
+            if (!priceString) return 0;
+            
             let cleanString = priceString.toString()
                 .replace('R$', '')
                 .replace(/\./g, '')
                 .replace(',', '.')
                 .trim();
             
-            // Converte para número
             let number = parseFloat(cleanString);
-            
-            // Retorna 0 se não for número válido
             return isNaN(number) ? 0 : number;
         }
         
         // Função para formatar preço para exibição
         function formatPrice(value) {
-            // Se for número, formata diretamente
             if (typeof value === 'number') {
                 return formatCurrency(value);
             }
             
-            // Se for string, tenta converter
             if (typeof value === 'string') {
                 let number = parsePrice(value);
                 return formatCurrency(number);
@@ -603,6 +742,121 @@
             return total;
         }
         
+        // Função para calcular o total final (total - crédito usado)
+        function calculateTotalFinal() {
+            const total = calculateTotal();
+            const final = Math.max(0, total - creditoUsado);
+            return final;
+        }
+        
+        // Função para atualizar o crédito disponível
+        function updateCreditoDisponivel() {
+            const novoCredito = parsePrice(customerCreditoInput.value);
+            creditoDisponivel = novoCredito;
+            
+            // Atualizar exibição
+            creditoDisponivelSpan.textContent = formatCurrency(creditoDisponivel);
+            
+            if (creditoDisponivel > 0) {
+                creditoDisponivelSpan.className = 'credito-valor';
+                creditoMensagem.textContent = `Cliente possui R$ ${formatCurrency(creditoDisponivel).replace('R$', '')} em crédito disponível.`;
+                usarCreditoBtn.disabled = false;
+            } else {
+                creditoDisponivelSpan.className = 'credito-valor credito-zero';
+                creditoMensagem.textContent = 'Este cliente não possui crédito disponível.';
+                usarCreditoBtn.disabled = true;
+            }
+            
+            updateCreditoUsado();
+        }
+        
+        // Função para atualizar o crédito usado
+        function updateCreditoUsado() {
+            const total = calculateTotal();
+            
+            // Atualizar células da tabela
+            totalAmountCell.textContent = formatCurrency(total);
+            creditoUsadoCell.textContent = formatCurrency(creditoUsado);
+            
+            const totalFinal = calculateTotalFinal();
+            totalFinalCell.textContent = formatCurrency(totalFinal);
+            
+            // Atualizar botões
+            limparCreditoBtn.disabled = creditoUsado === 0;
+            
+            // Atualizar mensagem de crédito restante
+            if (creditoUsado > 0) {
+                const creditoRestante = creditoDisponivel - creditoUsado;
+                creditoRestanteDiv.style.display = 'block';
+                creditoRestanteValor.textContent = formatCurrency(creditoRestante);
+            } else {
+                creditoRestanteDiv.style.display = 'none';
+            }
+        }
+        
+        // Função para usar crédito
+        function usarCredito() {
+            const total = calculateTotal();
+            
+            if (total === 0) {
+                alert('Adicione itens à encomenda antes de usar crédito.');
+                return;
+            }
+            
+            if (creditoDisponivel === 0) {
+                alert('Este cliente não possui crédito disponível.');
+                return;
+            }
+            
+            // Usar o mínimo entre crédito disponível e total
+            creditoUsado = Math.min(creditoDisponivel, total);
+            updateCreditoUsado();
+            
+            // Feedback visual
+            alert(`Crédito de ${formatCurrency(creditoUsado)} aplicado na encomenda!`);
+        }
+        
+        // Função para limpar uso de crédito
+        function limparCredito() {
+            creditoUsado = 0;
+            updateCreditoUsado();
+            alert('Uso de crédito removido!');
+        }
+        
+        // Função para abrir modal de ajuste de crédito
+        function abrirModalCredito() {
+            novoCreditoInput.value = customerCreditoInput.value;
+            modalCredito.style.display = 'flex';
+            novoCreditoInput.focus();
+            modalMensagem.style.display = 'none';
+        }
+        
+        // Função para fechar modal de crédito
+        function fecharModalCredito() {
+            modalCredito.style.display = 'none';
+        }
+        
+        // Função para confirmar ajuste de crédito
+        function confirmarAjusteCredito() {
+            const novoValor = parsePrice(novoCreditoInput.value);
+            
+            if (novoValor < 0) {
+                modalMensagem.style.display = 'block';
+                modalMensagem.style.backgroundColor = 'rgba(231, 76, 60, 0.1)';
+                modalMensagem.style.color = '#c0392b';
+                modalMensagem.style.border = '1px solid rgba(231, 76, 60, 0.2)';
+                modalMensagem.textContent = 'O valor do crédito não pode ser negativo.';
+                return;
+            }
+            
+            customerCreditoInput.value = formatPrice(novoValor).replace('R$', '').trim();
+            updateCreditoDisponivel();
+            fecharModalCredito();
+            
+            // Feedback
+            alert(`Crédito atualizado para ${formatCurrency(novoValor)}!`);
+        }
+        
         // Função para atualizar a tabela de itens
         function updateItemsTable() {
             itemsList.innerHTML = '';
@@ -611,7 +865,7 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `<td colspan="6" style="text-align: center; color: #7f8c8d;">Nenhum item adicionado ainda</td>`;
                 itemsList.appendChild(row);
-                totalAmountCell.textContent = formatCurrency(0);
+                updateCreditoUsado();
                 return;
             }
             
@@ -633,8 +887,7 @@
                 itemsList.appendChild(row);
             });
             
-            const total = calculateTotal();
-            totalAmountCell.textContent = formatCurrency(total);
+            updateCreditoUsado();
         }
         
         // Função para adicionar um item
@@ -699,6 +952,7 @@
                 customerNameInput.value = '';
                 customerCpfInput.value = '';
                 customerPhoneInput.value = '';
+                customerCreditoInput.value = '0,00';
                 orderDateInput.value = today;
                 schoolNameInput.value = '';
                 studentNameInput.value = '';
@@ -708,6 +962,8 @@
                 itemPriceInput.value = '0,00';
                 
                 orderItems = [];
+                creditoUsado = 0;
+                updateCreditoDisponivel();
                 updateItemsTable();
                 
                 // Fechar prévia se estiver aberta
@@ -726,6 +982,7 @@
             
             // Calcular totais
             const total = calculateTotal();
+            const totalFinal = calculateTotalFinal();
             
             // Limpar o elemento alvo
             targetElement.innerHTML = '';
@@ -743,8 +1000,8 @@
                         <div class="via-title">${via === 1 ? 'VIA DO CLIENTE' : 'VIA DA MALHARIA'}</div>
                         
                         <div class="company-header">
-                            <div class="company-name">MALHARIA IMPACTO</div>
-                            <div class="company-details">Setor de Mansões Sobradinho II | (61) 99952-4848</div>
+                            <div class="company-name">IMPACTO PAPELARIA E MALHARIA</div>
+                            <div class="company-details">SETOR DE MANSÕES SOBRADINHO II | (61) 98491-1180</div>
                             <div class="company-details">CNPJ: 54.793.545/0001-21</div>
                         </div>
                         
@@ -769,6 +1026,10 @@
                             <div class="data-row">
                                 <div class="data-label">Telefone:</div>
                                 <div class="data-value">${customerPhoneInput.value || 'Não informado'}</div>
+                            </div>
+                            <div class="data-row">
+                                <div class="data-label">Crédito Disponível:</div>
+                                <div class="data-value" style="color: #27ae60; font-weight: bold;">${formatCurrency(creditoDisponivel)}</div>
                             </div>
                         </div>
                         
@@ -820,11 +1081,35 @@
                             </table>
                             
                             <div class="total-section">
-                                Total: ${formatCurrency(total)}
+                                <div style="margin-bottom: 3mm;">
+                                    <span style="margin-right: 10mm;">Total:</span>
+                                    <span>${formatCurrency(total)}</span>
+                                </div>
+                                ${creditoUsado > 0 ? `
+                                <div style="margin-bottom: 3mm; color: #e74c3c;">
+                                    <span style="margin-right: 10mm;">(-) Crédito Usado:</span>
+                                    <span>${formatCurrency(creditoUsado)}</span>
+                                </div>
+                                ` : ''}
+                                <div style="color: #27ae60;">
+                                    <span style="margin-right: 10mm; font-size: 16pt;">Total Final:</span>
+                                    <span style="font-size: 16pt;">${formatCurrency(totalFinal)}</span>
+                                </div>
                             </div>
                             ` : '<p style="text-align: center; color: #7f8c8d;">Nenhum item adicionado</p>'}
                         </div>
                         
+                        ${creditoUsado > 0 ? `
+                        <div class="data-section">
+                            <div class="data-title">Informações de Crédito</div>
+                            <div style="margin-top: 5mm;">
+                                <p>• Crédito utilizado nesta compra: ${formatCurrency(creditoUsado)}</p>
+                                <p>• Saldo de crédito restante: ${formatCurrency(creditoDisponivel - creditoUsado)}</p>
+                                <p>• Este crédito foi debitado do saldo do cliente</p>
+                            </div>
+                        </div>
+                        ` : ''}
+
                         <div class="signature-section">
                             <div class="signature-line"></div>
                             <div class="signature-text">Assinatura do Cliente</div>
@@ -911,27 +1196,6 @@
             }, 100);
         }
         
-        // Função para formatar preço enquanto digita (OPCIONAL - comente se preferir simples)
-        function formatPriceInput() {
-            let value = itemPriceInput.value;
-            
-            // Remove tudo que não é número ou vírgula
-            value = value.replace(/[^\d,]/g, '');
-            
-            // Garante que só tem uma vírgula
-            const parts = value.split(',');
-            if (parts.length > 2) {
-                value = parts[0] + ',' + parts.slice(1).join('');
-            }
-            
-            // Limita a 2 casas decimais após a vírgula
-            if (parts[1] && parts[1].length > 2) {
-                value = parts[0] + ',' + parts[1].substring(0, 2);
-            }
-            
-            itemPriceInput.value = value;
-        }
-        
         // Event Listeners
         addItemBtn.addEventListener('click', addItem);
         
@@ -949,19 +1213,42 @@
         
         printPreviewBtn.addEventListener('click', printPreview);
         
-        // Permitir adicionar item com Enter no campo de quantidade
+        // Event Listeners para crédito
+        usarCreditoBtn.addEventListener('click', usarCredito);
+        limparCreditoBtn.addEventListener('click', limparCredito);
+        ajustarCreditoBtn.addEventListener('click', abrirModalCredito);
+        cancelarCreditoBtn.addEventListener('click', fecharModalCredito);
+        confirmarCreditoBtn.addEventListener('click', confirmarAjusteCredito);
+        
+        // Fechar modal ao clicar fora
+        modalCredito.addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharModalCredito();
+            }
+        });
+        
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modalCredito.style.display === 'flex') {
+                fecharModalCredito();
+            }
+        });
+        
+        // Permitir adicionar item com Enter
         itemQuantityInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 addItem();
             }
         });
         
-        // Permitir adicionar item com Enter no campo de preço
         itemPriceInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 addItem();
             }
         });
+        
+        // Atualizar crédito quando o campo mudar
+        customerCreditoInput.addEventListener('input', updateCreditoDisponivel);
         
         // Máscara para CPF
         customerCpfInput.addEventListener('input', function(e) {
@@ -1003,33 +1290,19 @@
             e.target.value = value;
         });
         
-        // Formatação simples para preço (opcional)
-        itemPriceInput.addEventListener('input', function() {
-            // Se preferir sem formatação, comente esta função
-            // Deixe o usuário digitar livremente
-        });
-        
-        // Valor padrão para o campo de preço
+        // Valor padrão para campos
+        customerCreditoInput.value = '0,00';
         itemPriceInput.value = '0,00';
         
-        // Inicializar a tabela de itens
+        // Inicializar crédito e tabela
+        updateCreditoDisponivel();
         updateItemsTable();
-        
-        // Adicionar alguns itens de exemplo (opcional - para demonstração)
-        // Comente estas linhas se não quiser itens de exemplo
-        /*
-        orderItems = [
-            { type: 'Camiseta', size: 'M', quantity: 2, price: 35.00 },
-            { type: 'Bermuda', size: 'G', quantity: 1, price: 45.00 }
-        ];
-        updateItemsTable();
-        */
         
         // Exibir mensagem de status
         console.log('Sistema de Encomendas - Malharia');
         console.log('✅ Sistema carregado com sucesso!');
+        console.log('✅ Sistema de crédito implementado');
         console.log('✅ Tamanhos disponíveis: 4, 6, 8, 10, 12, 14, P, M, G, GG');
-        console.log('✅ Campo de preço funcionando normalmente');
         console.log('✅ Funciona totalmente offline');
         console.log('✅ Sem dependências externas');
         console.log('✅ Pronto para uso!');
