@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Encomendas - Malharia</title>
+    <!-- Biblioteca html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #4a6fa5;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #4a6fa5;
+        }
+        
+        .form-section h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 1.4rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4a6fa5;
+            box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
+        }
+        
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .items-table th {
+            background-color: #4a6fa5;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .items-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .items-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: #4a6fa5;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3a5a8c;
+        }
+        
+        .btn-secondary {
+            background-color: #7f8c8d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #6c7b7d;
+        }
+        
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 12px;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-success {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #219653;
+        }
+        
+        .buttons-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Estilo para o molde do PDF */
+        #pdf-template {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            margin: 20px auto;
+            padding: 15mm;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            box-sizing: border-box;
+        }
+        
+        /* Para esconder o template na tela principal */
+        #pdf-container {
+            display: none;
+        }
+        
+        /* Estilo para visualização do template */
+        .pdf-view {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            margin: 20px auto;
+            padding: 15mm;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            box-sizing: border-box;
+            border: 1px dashed #ccc;
+        }
+        
+        .via-section {
+            margin-bottom: 25mm;
+            position: relative;
+        }
+        
+        .via-title {
+            text-align: center;
+            font-size: 18pt;
+            font-weight: bold;
+            margin-bottom: 10mm;
+            color: #2c3e50;
+            border-bottom: 2px solid #4a6fa5;
+            padding-bottom: 5px;
+        }
+        
+        .via-divider {
+            border-top: 2px dashed #ccc;
+            margin: 10mm 0;
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .company-header {
+            text-align: center;
+            margin-bottom: 10mm;
+        }
+        
+        .company-name {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .company-details {
+            font-size: 12pt;
+            color: #7f8c8d;
+        }
+        
+        .data-section {
+            margin-bottom: 8mm;
+        }
+        
+        .data-title {
+            font-size: 14pt;
+            font-weight: bold;
+            margin-bottom: 5mm;
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 3px;
+        }
+        
+        .data-row {
+            display: flex;
+            margin-bottom: 3mm;
+        }
+        
+        .data-label {
+            font-weight: bold;
+            width: 40mm;
+        }
+        
+        .data-value {
+            flex: 1;
+            border-bottom: 1px dotted #ccc;
+            min-height: 6mm;
+        }
+        
+        .items-pdf-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5mm;
+        }
+        
+        .items-pdf-table th {
+            background-color: #f2f2f2;
+            padding: 3mm;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        
+        .items-pdf-table td {
+            padding: 3mm;
+            border: 1px solid #ddd;
+        }
+        
+        .signature-section {
+            margin-top: 15mm;
+            text-align: center;
+        }
+        
+        .signature-line {
+            width: 80mm;
+            border-top: 1px solid #000;
+            margin: 10mm auto 3mm;
+        }
+        
+        .signature-text {
+            font-size: 11pt;
+        }
+        
+        .page-break {
+            page-break-after: always;
+        }
+        
+        .total-section {
+            margin-top: 5mm;
+            text-align: right;
+            font-size: 14pt;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            font-size: 10pt;
+            color: #7f8c8d;
+            margin-top: 10mm;
+            border-top: 1px solid #eee;
+            padding-top: 3mm;
+        }
+        
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            
+            #pdf-container, #pdf-container * {
+                visibility: visible;
+            }
+            
+            #pdf-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .buttons-container {
+                flex-direction: column;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📦 Sistema de Encomendas</h1>
+            <p class="subtitle">Malharia - Controle de Pedidos e Encomendas</p>
+            <p>Preencha o formulário abaixo para gerar o comprovante em PDF com duas vias.</p>
+        </header>
+        
+        <!-- Formulário de entrada -->
+        <div class="form-section">
+            <h2>📝 Dados Pessoais</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="customer-name">Nome do Cliente *</label>
+                    <input type="text" id="customer-name" placeholder="Digite o nome completo">
+                </div>
+                <div class="form-group">
+                    <label for="customer-cpf">CPF</label>
+                    <input type="text" id="customer-cpf" placeholder="000.000.000-00">
+                </div>
+                <div class="form-group">
+                    <label for="customer-phone">Telefone *</label>
+                    <input type="text" id="customer-phone" placeholder="(11) 99999-9999">
+                </div>
+                <div class="form-group">
+                    <label for="order-date">Data da Encomenda</label>
+                    <input type="date" id="order-date">
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>🏫 Dados da Escola (se aplicável)</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="school-name">Nome da Escola</label>
+                    <input type="text" id="school-name" placeholder="Nome da escola">
+                </div>
+                <div class="form-group">
+                    <label for="student-name">Nome do Aluno</label>
+                    <input type="text" id="student-name" placeholder="Nome completo do aluno">
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>👕 Itens da Encomenda</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="item-type">Tipo de Peça *</label>
+                    <select id="item-type">
+                        <option value="">Selecione uma peça</option>
+                        <option value="Camiseta">Camiseta</option>
+                        <option value="Camisa Polo">Camisa Polo</option>
+                        <option value="Calça">Calça</option>
+                        <option value="Bermuda">Bermuda</option>
+                        <option value="Moletom">Moletom</option>
+                        <option value="Jaqueta">Jaqueta</option>
+                        <option value="Uniforme">Uniforme</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="item-size">Tamanho *</label>
+                    <select id="item-size">
+                        <option value="">Selecione um tamanho</option>
+                        <option value="P">P</option>
+                        <option value="M">M</option>
+                        <option value="G">G</option>
+                        <option value="GG">GG</option>
+                        <option value="XG">XG</option>
+                        <option value="Infantil">Infantil</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="item-quantity">Quantidade *</label>
+                    <input type="number" id="item-quantity" min="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="item-price">Preço Unitário (R$)</label>
+                    <input type="number" id="item-price" min="0" step="0.01" placeholder="0,00">
+                </div>
+            </div>
+            
+            <div class="buttons-container">
+                <button id="add-item-btn" class="btn btn-success">➕ Adicionar Item</button>
+                <button id="clear-items-btn" class="btn btn-secondary">🗑️ Limpar Todos os Itens</button>
+            </div>
+            
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>Peça</th>
+                        <th>Tamanho</th>
+                        <th>Quantidade</th>
+                        <th>Preço Unit.</th>
+                        <th>Subtotal</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="items-list">
+                    <!-- Itens serão adicionados aqui dinamicamente -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" style="text-align: right; font-weight: bold;">Total:</td>
+                        <td id="total-amount" style="font-weight: bold;">R$ 0,00</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        
+        <div class="buttons-container">
+            <button id="generate-pdf-btn" class="btn btn-primary">🖨️ Gerar PDF com Duas Vias</button>
+            <button id="preview-btn" class="btn btn-secondary">👁️ Visualizar Prévia</button>
+            <button id="clear-form-btn" class="btn btn-secondary">🧹 Limpar Formulário</button>
+        </div>
+        
+        <!-- Prévia do PDF (inicialmente escondida) -->
+        <div id="preview-container" class="hidden">
+            <div class="form-section">
+                <h2>👁️ Prévia do Comprovante</h2>
+                <div id="pdf-preview" class="pdf-view">
+                    <!-- A prévia será gerada aqui -->
+                </div>
+                <div class="buttons-container">
+                    <button id="close-preview-btn" class="btn btn-secondary">Fechar Prévia</button>
+                    <button id="print-preview-btn" class="btn btn-primary">🖨️ Imprimir Prévia</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Container para o template do PDF (invisível) -->
+    <div id="pdf-container">
+        <div id="pdf-template">
+            <!-- O template será gerado aqui -->
+        </div>
+    </div>
+    
+    <script>
+        // Dados da encomenda
+        let orderItems = [];
+        let orderId = Math.floor(1000 + Math.random() * 9000);
+        
+        // Elementos do formulário
+        const customerNameInput = document.getElementById('customer-name');
+        const customerCpfInput = document.getElementById('customer-cpf');
+        const customerPhoneInput = document.getElementById('customer-phone');
+        const orderDateInput = document.getElementById('order-date');
+        const schoolNameInput = document.getElementById('school-name');
+        const studentNameInput = document.getElementById('student-name');
+        const itemTypeSelect = document.getElementById('item-type');
+        const itemSizeSelect = document.getElementById('item-size');
+        const itemQuantityInput = document.getElementById('item-quantity');
+        const itemPriceInput = document.getElementById('item-price');
+        
+        // Botões
+        const addItemBtn = document.getElementById('add-item-btn');
+        const clearItemsBtn = document.getElementById('clear-items-btn');
+        const generatePdfBtn = document.getElementById('generate-pdf-btn');
+        const previewBtn = document.getElementById('preview-btn');
+        const clearFormBtn = document.getElementById('clear-form-btn');
+        const closePreviewBtn = document.getElementById('close-preview-btn');
+        const printPreviewBtn = document.getElementById('print-preview-btn');
+        
+        // Tabela de itens
+        const itemsList = document.getElementById('items-list');
+        const totalAmountCell = document.getElementById('total-amount');
+        
+        // Containers
+        const previewContainer = document.getElementById('preview-container');
+        const pdfPreview = document.getElementById('pdf-preview');
+        const pdfTemplate = document.getElementById('pdf-template');
+        
+        // Configurar data atual como padrão
+        const today = new Date().toISOString().split('T')[0];
+        orderDateInput.value = today;
+        
+        // Função para formatar valores monetários
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+        }
+        
+        // Função para calcular o total
+        function calculateTotal() {
+            let total = 0;
+            orderItems.forEach(item => {
+                total += item.quantity * item.price;
+            });
+            return total;
+        }
+        
+        // Função para atualizar a tabela de itens
+        function updateItemsTable() {
+            itemsList.innerHTML = '';
+            
+            if (orderItems.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="6" style="text-align: center; color: #7f8c8d;">Nenhum item adicionado ainda</td>`;
+                itemsList.appendChild(row);
+                totalAmountCell.textContent = formatCurrency(0);
+                return;
+            }
+            
+            orderItems.forEach((item, index) => {
+                const row = document.createElement('tr');
+                const subtotal = item.quantity * item.price;
+                
+                row.innerHTML = `
+                    <td>${item.type}</td>
+                    <td>${item.size}</td>
+                    <td>${item.quantity}</td>
+                    <td>${formatCurrency(item.price)}</td>
+                    <td>${formatCurrency(subtotal)}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="removeItem(${index})">Remover</button>
+                    </td>
+                `;
+                
+                itemsList.appendChild(row);
+            });
+            
+            const total = calculateTotal();
+            totalAmountCell.textContent = formatCurrency(total);
+        }
+        
+        // Função para adicionar um item
+        function addItem() {
+            const type = itemTypeSelect.value;
+            const size = itemSizeSelect.value;
+            const quantity = parseInt(itemQuantityInput.value);
+            const price = parseFloat(itemPriceInput.value) || 0;
+            
+            if (!type || !size || !quantity) {
+                alert('Por favor, preencha pelo menos o tipo, tamanho e quantidade do item.');
+                return;
+            }
+            
+            const newItem = {
+                type,
+                size,
+                quantity,
+                price
+            };
+            
+            orderItems.push(newItem);
+            updateItemsTable();
+            
+            // Limpar os campos do item
+            itemTypeSelect.value = '';
+            itemSizeSelect.value = '';
+            itemQuantityInput.value = '1';
+            itemPriceInput.value = '';
+        }
+        
+        // Função para remover um item
+        window.removeItem = function(index) {
+            orderItems.splice(index, 1);
+            updateItemsTable();
+        };
+        
+        // Função para limpar todos os itens
+        function clearAllItems() {
+            if (orderItems.length === 0) return;
+            
+            if (confirm('Tem certeza que deseja remover todos os itens?')) {
+                orderItems = [];
+                updateItemsTable();
+            }
+        }
+        
+        // Função para limpar o formulário
+        function clearForm() {
+            if (confirm('Tem certeza que deseja limpar todo o formulário?')) {
+                customerNameInput.value = '';
+                customerCpfInput.value = '';
+                customerPhoneInput.value = '';
+                orderDateInput.value = today;
+                schoolNameInput.value = '';
+                studentNameInput.value = '';
+                itemTypeSelect.value = '';
+                itemSizeSelect.value = '';
+                itemQuantityInput.value = '1';
+                itemPriceInput.value = '';
+                
+                orderItems = [];
+                updateItemsTable();
+                
+                // Fechar prévia se estiver aberta
+                previewContainer.classList.add('hidden');
+            }
+        }
+        
+        // Função para gerar o template do PDF
+        function generatePdfTemplate(isPreview = false) {
+            const container = isPreview ? pdfPreview : pdfTemplate;
+            
+            // Formatar data
+            const orderDate = orderDateInput.value;
+            const formattedDate = orderDate ? new Date(orderDate).toLocaleDateString('pt-BR') : '';
+            
+            // Calcular totais
+            const total = calculateTotal();
+            
+            // Gerar conteúdo das vias
+            let viasHtml = '';
+            
+            for (let via = 1; via <= 2; via++) {
+                viasHtml += `
+                    <div class="via-section">
+                        <div class="via-title">${via === 1 ? 'VIA DO CLIENTE' : 'VIA DA MALHARIA'}</div>
+                        
+                        <div class="company-header">
+                            <div class="company-name">MALHARIA EXEMPLO</div>
+                            <div class="company-details">Rua das Malhas, 123 - Centro | (11) 99999-9999</div>
+                            <div class="company-details">CNPJ: 12.345.678/0001-99</div>
+                        </div>
+                        
+                        <div class="data-section">
+                            <div class="data-title">Dados da Encomenda</div>
+                            <div class="data-row">
+                                <div class="data-label">Nº da Encomenda:</div>
+                                <div class="data-value">${orderId}</div>
+                            </div>
+                            <div class="data-row">
+                                <div class="data-label">Data:</div>
+                                <div class="data-value">${formattedDate}</div>
+                            </div>
+                            <div class="data-row">
+                                <div class="data-label">Cliente:</div>
+                                <div class="data-value">${customerNameInput.value || 'Não informado'}</div>
+                            </div>
+                            <div class="data-row">
+                                <div class="data-label">CPF:</div>
+                                <div class="data-value">${customerCpfInput.value || 'Não informado'}</div>
+                            </div>
+                            <div class="data-row">
+                                <div class="data-label">Telefone:</div>
+                                <div class="data-value">${customerPhoneInput.value || 'Não informado'}</div>
+                            </div>
+                        </div>
+                        
+                        ${schoolNameInput.value || studentNameInput.value ? `
+                        <div class="data-section">
+                            <div class="data-title">Dados da Escola</div>
+                            ${schoolNameInput.value ? `
+                            <div class="data-row">
+                                <div class="data-label">Escola:</div>
+                                <div class="data-value">${schoolNameInput.value}</div>
+                            </div>
+                            ` : ''}
+                            ${studentNameInput.value ? `
+                            <div class="data-row">
+                                <div class="data-label">Aluno:</div>
+                                <div class="data-value">${studentNameInput.value}</div>
+                            </div>
+                            ` : ''}
+                        </div>
+                        ` : ''}
+                        
+                        <div class="data-section">
+                            <div class="data-title">Itens da Encomenda</div>
+                            ${orderItems.length > 0 ? `
+                            <table class="items-pdf-table">
+                                <thead>
+                                    <tr>
+                                        <th>Peça</th>
+                                        <th>Tamanho</th>
+                                        <th>Quantidade</th>
+                                        <th>Preço Unit.</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${orderItems.map(item => {
+                                        const subtotal = item.quantity * item.price;
+                                        return `
+                                            <tr>
+                                                <td>${item.type}</td>
+                                                <td>${item.size}</td>
+                                                <td>${item.quantity}</td>
+                                                <td>${formatCurrency(item.price)}</td>
+                                                <td>${formatCurrency(subtotal)}</td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                            
+                            <div class="total-section">
+                                Total: ${formatCurrency(total)}
+                            </div>
+                            ` : '<p style="text-align: center; color: #7f8c8d;">Nenhum item adicionado</p>'}
+                        </div>
+                        
+                        <div class="signature-section">
+                            <div class="signature-line"></div>
+                            <div class="signature-text">Assinatura do Cliente</div>
+                        </div>
+                        
+                        <div class="footer">
+                            Comprovante de Encomenda - Este documento não tem valor fiscal
+                        </div>
+                    </div>
+                `;
+                
+                // Adicionar divisor entre as vias (exceto após a última)
+                if (via < 2) {
+                    viasHtml += '<div class="via-divider">Corte aqui</div>';
+                }
+            }
+            
+            container.innerHTML = viasHtml;
+            
+            if (isPreview) {
+                previewContainer.classList.remove('hidden');
+                // Rolagem suave até a prévia
+                previewContainer.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        // Função para gerar o PDF
+        function generatePdf() {
+            // Validar dados mínimos
+            if (!customerNameInput.value.trim()) {
+                alert('Por favor, preencha o nome do cliente.');
+                customerNameInput.focus();
+                return;
+            }
+            
+            if (orderItems.length === 0) {
+                alert('Por favor, adicione pelo menos um item à encomenda.');
+                return;
+            }
+            
+            // Gerar template do PDF
+            generatePdfTemplate(false);
+            
+            // Configurações do PDF
+            const element = document.getElementById('pdf-template');
+            const opt = {
+                margin: [10, 10, 10, 10],
+                filename: `encomenda_${orderId}_${customerNameInput.value.replace(/\s+/g, '_')}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    letterRendering: true
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: 'portrait' 
+                }
+            };
+            
+            // Gerar e baixar o PDF
+            html2pdf().set(opt).from(element).save();
+            
+            // Incrementar ID para próxima encomenda
+            orderId++;
+        }
+        
+        // Event Listeners
+        addItemBtn.addEventListener('click', addItem);
+        
+        clearItemsBtn.addEventListener('click', clearAllItems);
+        
+        generatePdfBtn.addEventListener('click', generatePdf);
+        
+        previewBtn.addEventListener('click', () => {
+            if (!customerNameInput.value.trim()) {
+                alert('Por favor, preencha pelo menos o nome do cliente para visualizar a prévia.');
+                customerNameInput.focus();
+                return;
+            }
+            
+            generatePdfTemplate(true);
+        });
+        
+        clearFormBtn.addEventListener('click', clearForm);
+        
+        closePreviewBtn.addEventListener('click', () => {
+            previewContainer.classList.add('hidden');
+        });
+        
+        printPreviewBtn.addEventListener('click', () => {
+            window.print();
+        });
+        
+        // Permitir adicionar item com Enter no campo de quantidade
+        itemQuantityInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addItem();
+            }
+        });
+        
+        // Inicializar a tabela de itens
+        updateItemsTable();
+        
+        // Adicionar alguns itens de exemplo (opcional - para demonstração)
+        // Comente estas linhas se não quiser itens de exemplo
+        orderItems = [
+            { type: 'Camiseta', size: 'M', quantity: 2, price: 35.00 },
+            { type: 'Bermuda', size: 'G', quantity: 1, price: 45.00 }
+        ];
+        updateItemsTable();
+    </script>
+</body>
+</html>
