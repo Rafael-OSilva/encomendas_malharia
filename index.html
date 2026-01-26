@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Encomendas - Malharia</title>
-    <!-- Biblioteca html2pdf -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -169,23 +167,6 @@
             display: none;
         }
         
-        /* Estilo para o molde do PDF */
-        #pdf-template {
-            width: 210mm;
-            min-height: 297mm;
-            background: white;
-            margin: 20px auto;
-            padding: 15mm;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            box-sizing: border-box;
-        }
-        
-        /* Para esconder o template na tela principal */
-        #pdf-container {
-            display: none;
-        }
-        
         /* Estilo para visualização do template */
         .pdf-view {
             width: 210mm;
@@ -301,10 +282,6 @@
             font-size: 11pt;
         }
         
-        .page-break {
-            page-break-after: always;
-        }
-        
         .total-section {
             margin-top: 5mm;
             text-align: right;
@@ -321,20 +298,49 @@
             padding-top: 3mm;
         }
         
+        /* Estilos específicos para impressão */
         @media print {
             body * {
                 visibility: hidden;
+                margin: 0;
+                padding: 0;
             }
             
-            #pdf-container, #pdf-container * {
+            .print-section, .print-section * {
                 visibility: visible;
             }
             
-            #pdf-container {
+            .print-section {
                 position: absolute;
                 left: 0;
                 top: 0;
                 width: 100%;
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+                border: none;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            .pdf-view {
+                margin: 0;
+                padding: 15mm;
+                box-shadow: none;
+                border: none;
+                width: 210mm;
+                height: 297mm;
+                page-break-after: always;
+            }
+            
+            .pdf-view:last-child {
+                page-break-after: auto;
+            }
+            
+            .via-divider {
+                border-top: 2px dashed #ccc !important;
             }
         }
         
@@ -351,11 +357,25 @@
             .container {
                 padding: 15px;
             }
+            
+            .pdf-view {
+                width: 100%;
+                padding: 10px;
+                margin: 10px auto;
+                transform: scale(0.8);
+                transform-origin: top center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .pdf-view {
+                transform: scale(0.7);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container no-print">
         <header>
             <h1>📦 Sistema de Encomendas</h1>
             <p class="subtitle">Malharia - Controle de Pedidos e Encomendas</p>
@@ -407,11 +427,9 @@
                     <select id="item-type">
                         <option value="">Selecione uma peça</option>
                         <option value="Camiseta">Camiseta</option>
-                        <option value="Camisa Polo">Camisa Polo</option>
                         <option value="Calça">Calça</option>
                         <option value="Bermuda">Bermuda</option>
                         <option value="Moletom">Moletom</option>
-                        <option value="Jaqueta">Jaqueta</option>
                         <option value="Uniforme">Uniforme</option>
                         <option value="Outro">Outro</option>
                     </select>
@@ -420,12 +438,16 @@
                     <label for="item-size">Tamanho *</label>
                     <select id="item-size">
                         <option value="">Selecione um tamanho</option>
+                        <option value="4">4</option>
+                        <option value="6">6</option>
+                        <option value="8">8</option>
+                        <option value="10">10</option>
+                        <option value="12">12</option>
+                        <option value="14">14</option>
                         <option value="P">P</option>
                         <option value="M">M</option>
                         <option value="G">G</option>
                         <option value="GG">GG</option>
-                        <option value="XG">XG</option>
-                        <option value="Infantil">Infantil</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -434,7 +456,7 @@
                 </div>
                 <div class="form-group">
                     <label for="item-price">Preço Unitário (R$)</label>
-                    <input type="number" id="item-price" min="0" step="0.01" placeholder="0,00">
+                    <input type="text" id="item-price" placeholder="0,00">
                 </div>
             </div>
             
@@ -468,13 +490,13 @@
         </div>
         
         <div class="buttons-container">
-            <button id="generate-pdf-btn" class="btn btn-primary">🖨️ Gerar PDF com Duas Vias</button>
+            <button id="print-btn" class="btn btn-primary">🖨️ Imprimir Comprovante</button>
             <button id="preview-btn" class="btn btn-secondary">👁️ Visualizar Prévia</button>
             <button id="clear-form-btn" class="btn btn-secondary">🧹 Limpar Formulário</button>
         </div>
         
         <!-- Prévia do PDF (inicialmente escondida) -->
-        <div id="preview-container" class="hidden">
+        <div id="preview-container" class="hidden no-print">
             <div class="form-section">
                 <h2>👁️ Prévia do Comprovante</h2>
                 <div id="pdf-preview" class="pdf-view">
@@ -488,12 +510,8 @@
         </div>
     </div>
     
-    <!-- Container para o template do PDF (invisível) -->
-    <div id="pdf-container">
-        <div id="pdf-template">
-            <!-- O template será gerado aqui -->
-        </div>
-    </div>
+    <!-- Container para impressão -->
+    <div id="print-container" class="print-section"></div>
     
     <script>
         // Dados da encomenda
@@ -515,7 +533,7 @@
         // Botões
         const addItemBtn = document.getElementById('add-item-btn');
         const clearItemsBtn = document.getElementById('clear-items-btn');
-        const generatePdfBtn = document.getElementById('generate-pdf-btn');
+        const printBtn = document.getElementById('print-btn');
         const previewBtn = document.getElementById('preview-btn');
         const clearFormBtn = document.getElementById('clear-form-btn');
         const closePreviewBtn = document.getElementById('close-preview-btn');
@@ -528,7 +546,7 @@
         // Containers
         const previewContainer = document.getElementById('preview-container');
         const pdfPreview = document.getElementById('pdf-preview');
-        const pdfTemplate = document.getElementById('pdf-template');
+        const printContainer = document.getElementById('print-container');
         
         // Configurar data atual como padrão
         const today = new Date().toISOString().split('T')[0];
@@ -538,8 +556,42 @@
         function formatCurrency(value) {
             return new Intl.NumberFormat('pt-BR', {
                 style: 'currency',
-                currency: 'BRL'
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
             }).format(value);
+        }
+        
+        // Função para converter string de preço para número
+        function parsePrice(priceString) {
+            // Remove R$, pontos e substitui vírgula por ponto
+            let cleanString = priceString.toString()
+                .replace('R$', '')
+                .replace(/\./g, '')
+                .replace(',', '.')
+                .trim();
+            
+            // Converte para número
+            let number = parseFloat(cleanString);
+            
+            // Retorna 0 se não for número válido
+            return isNaN(number) ? 0 : number;
+        }
+        
+        // Função para formatar preço para exibição
+        function formatPrice(value) {
+            // Se for número, formata diretamente
+            if (typeof value === 'number') {
+                return formatCurrency(value);
+            }
+            
+            // Se for string, tenta converter
+            if (typeof value === 'string') {
+                let number = parsePrice(value);
+                return formatCurrency(number);
+            }
+            
+            return formatCurrency(0);
         }
         
         // Função para calcular o total
@@ -590,10 +642,18 @@
             const type = itemTypeSelect.value;
             const size = itemSizeSelect.value;
             const quantity = parseInt(itemQuantityInput.value);
-            const price = parseFloat(itemPriceInput.value) || 0;
+            
+            // Obter e processar o preço
+            let priceStr = itemPriceInput.value || '0';
+            const price = parsePrice(priceStr);
             
             if (!type || !size || !quantity) {
                 alert('Por favor, preencha pelo menos o tipo, tamanho e quantidade do item.');
+                return;
+            }
+            
+            if (quantity < 1) {
+                alert('A quantidade deve ser pelo menos 1.');
                 return;
             }
             
@@ -611,7 +671,10 @@
             itemTypeSelect.value = '';
             itemSizeSelect.value = '';
             itemQuantityInput.value = '1';
-            itemPriceInput.value = '';
+            itemPriceInput.value = '0,00';
+            
+            // Focar no tipo de peça para próximo item
+            itemTypeSelect.focus();
         }
         
         // Função para remover um item
@@ -642,26 +705,34 @@
                 itemTypeSelect.value = '';
                 itemSizeSelect.value = '';
                 itemQuantityInput.value = '1';
-                itemPriceInput.value = '';
+                itemPriceInput.value = '0,00';
                 
                 orderItems = [];
                 updateItemsTable();
                 
                 // Fechar prévia se estiver aberta
                 previewContainer.classList.add('hidden');
+                
+                // Focar no primeiro campo
+                customerNameInput.focus();
             }
         }
         
-        // Função para gerar o template do PDF
-        function generatePdfTemplate(isPreview = false) {
-            const container = isPreview ? pdfPreview : pdfTemplate;
-            
+        // Função para gerar o template do comprovante
+        function generateTemplate(targetElement) {
             // Formatar data
             const orderDate = orderDateInput.value;
             const formattedDate = orderDate ? new Date(orderDate).toLocaleDateString('pt-BR') : '';
             
             // Calcular totais
             const total = calculateTotal();
+            
+            // Limpar o elemento alvo
+            targetElement.innerHTML = '';
+            
+            // Criar template principal
+            const template = document.createElement('div');
+            template.className = 'pdf-view';
             
             // Gerar conteúdo das vias
             let viasHtml = '';
@@ -672,9 +743,9 @@
                         <div class="via-title">${via === 1 ? 'VIA DO CLIENTE' : 'VIA DA MALHARIA'}</div>
                         
                         <div class="company-header">
-                            <div class="company-name">MALHARIA EXEMPLO</div>
-                            <div class="company-details">Rua das Malhas, 123 - Centro | (11) 99999-9999</div>
-                            <div class="company-details">CNPJ: 12.345.678/0001-99</div>
+                            <div class="company-name">MALHARIA IMPACTO</div>
+                            <div class="company-details">Setor de Mansões Sobradinho II | (61) 99952-4848</div>
+                            <div class="company-details">CNPJ: 54.793.545/0001-21</div>
                         </div>
                         
                         <div class="data-section">
@@ -754,35 +825,55 @@
                             ` : '<p style="text-align: center; color: #7f8c8d;">Nenhum item adicionado</p>'}
                         </div>
                         
+                        <div class="data-section">
+                            <div class="data-title">Observações</div>
+                            <div style="margin-top: 10mm;">
+                                <p>• Prazo de entrega: 15 dias úteis</p>
+                                <p>• Alterações após confirmação sujeitas a disponibilidade</p>
+                                <p>• Em caso de dúvidas, entre em contato pelo telefone acima</p>
+                            </div>
+                        </div>
+                        
                         <div class="signature-section">
                             <div class="signature-line"></div>
                             <div class="signature-text">Assinatura do Cliente</div>
                         </div>
                         
                         <div class="footer">
-                            Comprovante de Encomenda - Este documento não tem valor fiscal
+                            Comprovante de Encomenda - Este documento não tem valor fiscal<br>
+                            Data de impressão: ${new Date().toLocaleDateString('pt-BR')}
                         </div>
                     </div>
                 `;
                 
                 // Adicionar divisor entre as vias (exceto após a última)
                 if (via < 2) {
-                    viasHtml += '<div class="via-divider">Corte aqui</div>';
+                    viasHtml += '<div class="via-divider">CORTAR AQUI</div>';
                 }
             }
             
-            container.innerHTML = viasHtml;
+            template.innerHTML = viasHtml;
+            targetElement.appendChild(template);
             
-            if (isPreview) {
-                previewContainer.classList.remove('hidden');
-                // Rolagem suave até a prévia
-                previewContainer.scrollIntoView({ behavior: 'smooth' });
-            }
+            return template;
         }
         
-        // Função para gerar o PDF
-        function generatePdf() {
-            // Validar dados mínimos
+        // Função para visualizar prévia
+        function showPreview() {
+            if (!customerNameInput.value.trim()) {
+                alert('Por favor, preencha pelo menos o nome do cliente para visualizar a prévia.');
+                customerNameInput.focus();
+                return;
+            }
+            
+            generateTemplate(pdfPreview);
+            previewContainer.classList.remove('hidden');
+            // Rolagem suave até a prévia
+            previewContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Função para imprimir o comprovante
+        function printComprovante() {
             if (!customerNameInput.value.trim()) {
                 alert('Por favor, preencha o nome do cliente.');
                 customerNameInput.focus();
@@ -794,32 +885,60 @@
                 return;
             }
             
-            // Gerar template do PDF
-            generatePdfTemplate(false);
+            // Gerar template para impressão
+            generateTemplate(printContainer);
             
-            // Configurações do PDF
-            const element = document.getElementById('pdf-template');
-            const opt = {
-                margin: [10, 10, 10, 10],
-                filename: `encomenda_${orderId}_${customerNameInput.value.replace(/\s+/g, '_')}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2,
-                    useCORS: true,
-                    letterRendering: true
-                },
-                jsPDF: { 
-                    unit: 'mm', 
-                    format: 'a4', 
-                    orientation: 'portrait' 
-                }
-            };
+            // Aguardar um momento para o DOM ser atualizado
+            setTimeout(() => {
+                // Abrir diálogo de impressão
+                window.print();
+                
+                // Incrementar ID para próxima encomenda
+                orderId++;
+                
+                // Limpar o container de impressão após um tempo
+                setTimeout(() => {
+                    printContainer.innerHTML = '';
+                }, 500);
+            }, 100);
+        }
+        
+        // Função para imprimir a prévia
+        function printPreview() {
+            // Gerar template para impressão
+            generateTemplate(printContainer);
             
-            // Gerar e baixar o PDF
-            html2pdf().set(opt).from(element).save();
+            // Aguardar um momento para o DOM ser atualizado
+            setTimeout(() => {
+                // Abrir diálogo de impressão
+                window.print();
+                
+                // Limpar o container de impressão após um tempo
+                setTimeout(() => {
+                    printContainer.innerHTML = '';
+                }, 500);
+            }, 100);
+        }
+        
+        // Função para formatar preço enquanto digita (OPCIONAL - comente se preferir simples)
+        function formatPriceInput() {
+            let value = itemPriceInput.value;
             
-            // Incrementar ID para próxima encomenda
-            orderId++;
+            // Remove tudo que não é número ou vírgula
+            value = value.replace(/[^\d,]/g, '');
+            
+            // Garante que só tem uma vírgula
+            const parts = value.split(',');
+            if (parts.length > 2) {
+                value = parts[0] + ',' + parts.slice(1).join('');
+            }
+            
+            // Limita a 2 casas decimais após a vírgula
+            if (parts[1] && parts[1].length > 2) {
+                value = parts[0] + ',' + parts[1].substring(0, 2);
+            }
+            
+            itemPriceInput.value = value;
         }
         
         // Event Listeners
@@ -827,17 +946,9 @@
         
         clearItemsBtn.addEventListener('click', clearAllItems);
         
-        generatePdfBtn.addEventListener('click', generatePdf);
+        printBtn.addEventListener('click', printComprovante);
         
-        previewBtn.addEventListener('click', () => {
-            if (!customerNameInput.value.trim()) {
-                alert('Por favor, preencha pelo menos o nome do cliente para visualizar a prévia.');
-                customerNameInput.focus();
-                return;
-            }
-            
-            generatePdfTemplate(true);
-        });
+        previewBtn.addEventListener('click', showPreview);
         
         clearFormBtn.addEventListener('click', clearForm);
         
@@ -845,9 +956,7 @@
             previewContainer.classList.add('hidden');
         });
         
-        printPreviewBtn.addEventListener('click', () => {
-            window.print();
-        });
+        printPreviewBtn.addEventListener('click', printPreview);
         
         // Permitir adicionar item com Enter no campo de quantidade
         itemQuantityInput.addEventListener('keypress', (e) => {
@@ -856,16 +965,83 @@
             }
         });
         
+        // Permitir adicionar item com Enter no campo de preço
+        itemPriceInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addItem();
+            }
+        });
+        
+        // Máscara para CPF
+        customerCpfInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length > 11) {
+                value = value.substring(0, 11);
+            }
+            
+            if (value.length > 9) {
+                value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, '$1.$2.$3-$4');
+            } else if (value.length > 6) {
+                value = value.replace(/^(\d{3})(\d{3})(\d{1,3}).*/, '$1.$2.$3');
+            } else if (value.length > 3) {
+                value = value.replace(/^(\d{3})(\d{1,3}).*/, '$1.$2');
+            }
+            
+            e.target.value = value;
+        });
+        
+        // Máscara para telefone
+        customerPhoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length > 11) {
+                value = value.substring(0, 11);
+            }
+            
+            if (value.length > 10) {
+                value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+            } else if (value.length > 6) {
+                value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+            } else if (value.length > 2) {
+                value = value.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2');
+            } else if (value.length > 0) {
+                value = value.replace(/^(\d{0,2})/, '($1');
+            }
+            
+            e.target.value = value;
+        });
+        
+        // Formatação simples para preço (opcional)
+        itemPriceInput.addEventListener('input', function() {
+            // Se preferir sem formatação, comente esta função
+            // Deixe o usuário digitar livremente
+        });
+        
+        // Valor padrão para o campo de preço
+        itemPriceInput.value = '0,00';
+        
         // Inicializar a tabela de itens
         updateItemsTable();
         
         // Adicionar alguns itens de exemplo (opcional - para demonstração)
         // Comente estas linhas se não quiser itens de exemplo
+        /*
         orderItems = [
             { type: 'Camiseta', size: 'M', quantity: 2, price: 35.00 },
             { type: 'Bermuda', size: 'G', quantity: 1, price: 45.00 }
         ];
         updateItemsTable();
+        */
+        
+        // Exibir mensagem de status
+        console.log('Sistema de Encomendas - Malharia');
+        console.log('✅ Sistema carregado com sucesso!');
+        console.log('✅ Tamanhos disponíveis: 4, 6, 8, 10, 12, 14, P, M, G, GG');
+        console.log('✅ Campo de preço funcionando normalmente');
+        console.log('✅ Funciona totalmente offline');
+        console.log('✅ Sem dependências externas');
+        console.log('✅ Pronto para uso!');
     </script>
 </body>
 </html>
