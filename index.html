@@ -474,11 +474,12 @@
             height: 8mm;
             border: 2px solid #4a6fa5;
             border-radius: 2px;
+            cursor: pointer;
             position: relative;
         }
         
-        .checkbox-box:before {
-            content: "";
+        .checkbox-box.checked:before {
+            content: "✓";
             position: absolute;
             top: 50%;
             left: 50%;
@@ -486,12 +487,6 @@
             font-size: 6mm;
             font-weight: bold;
             color: #27ae60;
-            opacity: 0;
-        }
-        
-        .checkbox-box.print-checkbox:before {
-            content: "✓";
-            opacity: 0;
         }
         
         .data-section-small {
@@ -501,7 +496,7 @@
             text-align: center;
         }
         
-        /* Estilos específicos para impressão - CORRIGIDOS */
+        /* Estilos específicos para impressão */
         @media print {
             body * {
                 visibility: hidden;
@@ -536,7 +531,6 @@
                 width: 210mm;
                 height: 297mm;
                 page-break-after: always;
-                position: relative;
             }
             
             .pdf-view:last-child {
@@ -545,38 +539,19 @@
             
             .via-divider {
                 border-top: 2px dashed #ccc !important;
-                -webkit-print-color-adjust: exact;
-                color-adjust: exact;
             }
             
             .referencia-precos {
                 display: none !important;
             }
             
-            /* IMPORTANTE: Garantir que os checkboxes apareçam */
+            /* Estilos para checkboxes na impressão */
             .checkbox-box {
-                display: block !important;
-                visibility: visible !important;
-                border: 2px solid #4a6fa5 !important;
-                -webkit-print-color-adjust: exact;
-                color-adjust: exact;
+                border: 2px solid #000 !important;
             }
             
-            .controle-section {
-                border: 2px solid #4a6fa5 !important;
-                -webkit-print-color-adjust: exact;
-                color-adjust: exact;
-            }
-            
-            /* Forçar todas as cores a aparecerem */
-            * {
-                -webkit-print-color-adjust: exact !important;
-                color-adjust: exact !important;
-            }
-            
-            /* Garantir que tudo na via da malharia seja visível */
-            .via-section * {
-                visibility: visible !important;
+            .checkbox-box.checked:before {
+                color: #000 !important;
             }
         }
         
@@ -1410,17 +1385,17 @@
                             <div class="controle-grid">
                                 <div class="checkbox-item">
                                     <div class="checkbox-label">SEPARADO</div>
-                                    <div class="checkbox-box print-checkbox"></div>
+                                    <div class="checkbox-box"></div>
                                     <div class="data-section-small">Material separado</div>
                                 </div>
                                 <div class="checkbox-item">
                                     <div class="checkbox-label">ENTREGUE</div>
-                                    <div class="checkbox-box print-checkbox"></div>
+                                    <div class="checkbox-box"></div>
                                     <div class="data-section-small">Cliente retirou</div>
                                 </div>
                                 <div class="checkbox-item">
                                     <div class="checkbox-label">PAGO</div>
-                                    <div class="checkbox-box print-checkbox"></div>
+                                    <div class="checkbox-box"></div>
                                     <div class="data-section-small">Pagamento realizado</div>
                                 </div>
                             </div>
@@ -1438,12 +1413,6 @@
                             <div class="signature-line"></div>
                             <div class="signature-text">Assinatura do Cliente</div>
                         </div>
-                        
-                        <div class="footer">
-                            Comprovante de Encomenda - Este documento não tem valor fiscal<br>
-                            Data de impressão: ${new Date().toLocaleDateString('pt-BR')}
-                        </div>
-                    </div>
                 `;
                 
                 // Adicionar divisor entre as vias (exceto após a última)
@@ -1490,34 +1459,8 @@
             
             // Aguardar um momento para o DOM ser atualizado
             setTimeout(() => {
-                // Forçar o navegador a mostrar todas as cores na impressão
-                const style = document.createElement('style');
-                style.innerHTML = `
-                    @media print {
-                        * {
-                            -webkit-print-color-adjust: exact !important;
-                            print-color-adjust: exact !important;
-                            color-adjust: exact !important;
-                        }
-                        .checkbox-box {
-                            border: 2px solid #4a6fa5 !important;
-                            display: block !important;
-                            visibility: visible !important;
-                        }
-                        .controle-section {
-                            border: 2px solid #4a6fa5 !important;
-                        }
-                    }
-                `;
-                document.head.appendChild(style);
-                
                 // Abrir diálogo de impressão
                 window.print();
-                
-                // Remover o estilo após a impressão
-                setTimeout(() => {
-                    style.remove();
-                }, 1000);
                 
                 // Incrementar ID para próxima encomenda
                 orderId++;
@@ -1536,34 +1479,8 @@
             
             // Aguardar um momento para o DOM ser atualizado
             setTimeout(() => {
-                // Forçar o navegador a mostrar todas as cores na impressão
-                const style = document.createElement('style');
-                style.innerHTML = `
-                    @media print {
-                        * {
-                            -webkit-print-color-adjust: exact !important;
-                            print-color-adjust: exact !important;
-                            color-adjust: exact !important;
-                        }
-                        .checkbox-box {
-                            border: 2px solid #4a6fa5 !important;
-                            display: block !important;
-                            visibility: visible !important;
-                        }
-                        .controle-section {
-                            border: 2px solid #4a6fa5 !important;
-                        }
-                    }
-                `;
-                document.head.appendChild(style);
-                
                 // Abrir diálogo de impressão
                 window.print();
-                
-                // Remover o estilo após a impressão
-                setTimeout(() => {
-                    style.remove();
-                }, 1000);
                 
                 // Limpar o container de impressão após um tempo
                 setTimeout(() => {
@@ -1713,7 +1630,7 @@
         console.log('✅ Sistema de crédito implementado');
         console.log('✅ Tabela de referência de preços adicionada');
         console.log('✅ Seção de controle interno na via da malharia');
-        console.log('✅ Checkboxes idênticos na pré-visualização e impressão');
+        console.log('✅ Checkboxes para: SEPARADO ✓ ENTREGUE ✓ PAGO ✓');
         console.log('✅ Tamanhos disponíveis: 4, 6, 8, 10, 12, 14, P, M, G, GG');
         console.log('✅ Funciona totalmente offline');
         console.log('✅ Sem dependências externas');
