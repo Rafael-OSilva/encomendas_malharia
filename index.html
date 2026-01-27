@@ -432,13 +432,14 @@
             transform: translateY(-1px);
         }
         
-        /* Estilos para checkboxes de controle */
+        /* Estilos para checkboxes de controle - MODIFICADO */
         .controle-section {
             margin-top: 15mm;
             padding: 5mm;
             border: 2px solid #4a6fa5;
             border-radius: 5px;
             background-color: #f8f9fa;
+            page-break-inside: avoid;
         }
         
         .controle-title {
@@ -449,17 +450,22 @@
             text-align: center;
         }
         
+        /* MODIFICAÇÃO AQUI: Usar flexbox com nowrap */
         .controle-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 5mm;
+            display: flex;
+            justify-content: space-between;
+            gap: 3mm;
             text-align: center;
+            flex-wrap: nowrap;
+            page-break-inside: avoid;
         }
         
         .checkbox-item {
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-width: 0; /* Importante para não quebrar */
         }
         
         .checkbox-label {
@@ -467,6 +473,7 @@
             margin-bottom: 2mm;
             font-weight: bold;
             color: #2c3e50;
+            white-space: nowrap;
         }
         
         .checkbox-box {
@@ -476,6 +483,7 @@
             border-radius: 2px;
             cursor: pointer;
             position: relative;
+            flex-shrink: 0;
         }
         
         .checkbox-box.checked:before {
@@ -490,13 +498,24 @@
         }
         
         .data-section-small {
-            font-size: 10pt;
+            font-size: 9pt;
             color: #666;
-            margin-top: 3mm;
+            margin-top: 2mm;
             text-align: center;
         }
         
-        /* Estilos específicos para impressão */
+        /* NOVAS REGRAS PARA IMPRESSÃO */
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+        
+        .no-break {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        
+        /* Estilos específicos para impressão - MODIFICADO */
         @media print {
             body * {
                 visibility: hidden;
@@ -524,25 +543,47 @@
             }
             
             .pdf-view {
-                margin: 0;
+                margin: 0 auto;
                 padding: 15mm;
                 box-shadow: none;
                 border: none;
                 width: 210mm;
-                height: 297mm;
+                min-height: 297mm;
                 page-break-after: always;
+                page-break-inside: avoid;
             }
             
             .pdf-view:last-child {
                 page-break-after: auto;
             }
             
+            .via-section {
+                page-break-inside: avoid;
+            }
+            
             .via-divider {
                 border-top: 2px dashed #ccc !important;
+                page-break-before: avoid;
             }
             
             .referencia-precos {
                 display: none !important;
+            }
+            
+            /* CORREÇÃO PRINCIPAL: Garantir que os checkboxes fiquem na mesma linha */
+            .controle-grid {
+                display: flex !important;
+                justify-content: space-between !important;
+                flex-wrap: nowrap !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            
+            .checkbox-item {
+                flex: 1 !important;
+                min-width: 55mm !important;
+                max-width: 60mm !important;
+                page-break-inside: avoid;
             }
             
             /* Estilos para checkboxes na impressão */
@@ -552,6 +593,12 @@
             
             .checkbox-box.checked:before {
                 color: #000 !important;
+            }
+            
+            /* Forçar quebra de página antes da seção de controle se necessário */
+            .controle-section {
+                page-break-inside: avoid;
+                page-break-before: auto;
             }
         }
         
@@ -597,8 +644,8 @@
             }
             
             .controle-grid {
-                grid-template-columns: 1fr;
-                gap: 3mm;
+                flex-direction: column;
+                gap: 5mm;
             }
         }
         
@@ -1240,7 +1287,7 @@
             }
         }
         
-        // Função para gerar o template do comprovante
+        // Função para gerar o template do comprovante - MODIFICADA
         function generateTemplate(targetElement) {
             // Formatar data
             const orderDate = orderDateInput.value;
@@ -1255,7 +1302,7 @@
             
             // Criar template principal
             const template = document.createElement('div');
-            template.className = 'pdf-view';
+            template.className = 'pdf-view no-break';
             
             // Gerar conteúdo das vias
             let viasHtml = '';
@@ -1264,7 +1311,7 @@
                 const isViaMalharia = via === 2;
                 
                 viasHtml += `
-                    <div class="via-section">
+                    <div class="via-section no-break">
                         <div class="via-title">${isViaMalharia ? 'VIA DA MALHARIA' : 'VIA DO CLIENTE'}</div>
                         
                         <div class="company-header">
@@ -1379,21 +1426,21 @@
                         ` : ''}
                         
                         ${isViaMalharia ? `
-                        <!-- Seção de Controle Interno (apenas na via da malharia) -->
-                        <div class="controle-section">
+                        <!-- Seção de Controle Interno (apenas na via da malharia) - MODIFICADA -->
+                        <div class="controle-section no-break">
                             <div class="controle-title">CONTROLE INTERNO - MALHARIA</div>
-                            <div class="controle-grid">
-                                <div class="checkbox-item">
+                            <div class="controle-grid" style="display: flex; justify-content: space-between; gap: 3mm; flex-wrap: nowrap;">
+                                <div class="checkbox-item" style="flex: 1; text-align: center; min-width: 0;">
                                     <div class="checkbox-label">SEPARADO</div>
                                     <div class="checkbox-box"></div>
                                     <div class="data-section-small">Material separado</div>
                                 </div>
-                                <div class="checkbox-item">
+                                <div class="checkbox-item" style="flex: 1; text-align: center; min-width: 0;">
                                     <div class="checkbox-label">ENTREGUE</div>
                                     <div class="checkbox-box"></div>
                                     <div class="data-section-small">Cliente retirou</div>
                                 </div>
-                                <div class="checkbox-item">
+                                <div class="checkbox-item" style="flex: 1; text-align: center; min-width: 0;">
                                     <div class="checkbox-label">PAGO</div>
                                     <div class="checkbox-box"></div>
                                     <div class="data-section-small">Pagamento realizado</div>
@@ -1634,6 +1681,7 @@
         console.log('✅ Tamanhos disponíveis: 4, 6, 8, 10, 12, 14, P, M, G, GG');
         console.log('✅ Funciona totalmente offline');
         console.log('✅ Sem dependências externas');
+        console.log('✅ FIX: Checkboxes agora não quebram linha na impressão');
         console.log('✅ Pronto para uso!');
     </script>
 </body>
