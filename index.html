@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,14 +10,14 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             margin: 0;
             padding: 20px;
             background-color: #f5f5f5;
             color: #333;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -25,24 +26,24 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             padding: 25px;
         }
-        
+
         header {
             text-align: center;
             margin-bottom: 30px;
             border-bottom: 2px solid #4a6fa5;
             padding-bottom: 20px;
         }
-        
+
         h1 {
             color: #2c3e50;
             margin-bottom: 5px;
         }
-        
+
         .subtitle {
             color: #7f8c8d;
             font-size: 1.1rem;
         }
-        
+
         .form-section {
             margin-bottom: 30px;
             padding: 20px;
@@ -50,66 +51,68 @@
             background-color: #f9f9f9;
             border-left: 4px solid #4a6fa5;
         }
-        
+
         .form-section h2 {
             margin-top: 0;
             color: #2c3e50;
             font-size: 1.4rem;
         }
-        
+
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
-        
+
         .form-group {
             margin-bottom: 15px;
         }
-        
+
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
             color: #2c3e50;
         }
-        
-        input, select {
+
+        input,
+        select {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
         }
-        
-        input:focus, select:focus {
+
+        input:focus,
+        select:focus {
             outline: none;
             border-color: #4a6fa5;
             box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
         }
-        
+
         .items-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        
+
         .items-table th {
             background-color: #4a6fa5;
             color: white;
             padding: 12px;
             text-align: left;
         }
-        
+
         .items-table td {
             padding: 12px;
             border-bottom: 1px solid #ddd;
         }
-        
+
         .items-table tr:nth-child(even) {
             background-color: #f9f9f9;
         }
-        
+
         .btn {
             padding: 12px 20px;
             border: none;
@@ -119,63 +122,63 @@
             font-weight: 600;
             transition: all 0.3s;
         }
-        
+
         .btn-primary {
             background-color: #4a6fa5;
             color: white;
         }
-        
+
         .btn-primary:hover {
             background-color: #3a5a8c;
         }
-        
+
         .btn-secondary {
             background-color: #7f8c8d;
             color: white;
         }
-        
+
         .btn-secondary:hover {
             background-color: #6c7b7d;
         }
-        
+
         .btn-danger {
             background-color: #e74c3c;
             color: white;
             padding: 8px 12px;
         }
-        
+
         .btn-danger:hover {
             background-color: #c0392b;
         }
-        
+
         .btn-success {
             background-color: #27ae60;
             color: white;
         }
-        
+
         .btn-success:hover {
             background-color: #219653;
         }
-        
+
         .btn-info {
             background-color: #3498db;
             color: white;
         }
-        
+
         .btn-info:hover {
             background-color: #2980b9;
         }
-        
+
         .buttons-container {
             display: flex;
             gap: 15px;
             margin-top: 20px;
         }
-        
+
         .hidden {
             display: none;
         }
-        
+
         /* Estilo para visualização do template */
         .pdf-view {
             width: 210mm;
@@ -188,12 +191,12 @@
             box-sizing: border-box;
             border: 1px dashed #ccc;
         }
-        
+
         .via-section {
             margin-bottom: 25mm;
             position: relative;
         }
-        
+
         .via-title {
             text-align: center;
             font-size: 18pt;
@@ -203,7 +206,7 @@
             border-bottom: 2px solid #4a6fa5;
             padding-bottom: 5px;
         }
-        
+
         .via-divider {
             border-top: 2px dashed #ccc;
             margin: 10mm 0;
@@ -211,28 +214,28 @@
             color: #7f8c8d;
             font-style: italic;
         }
-        
+
         .company-header {
             text-align: center;
             margin-bottom: 10mm;
         }
-        
+
         .company-name {
             font-size: 24pt;
             font-weight: bold;
             color: #2c3e50;
             margin-bottom: 5px;
         }
-        
+
         .company-details {
             font-size: 12pt;
             color: #7f8c8d;
         }
-        
+
         .data-section {
             margin-bottom: 8mm;
         }
-        
+
         .data-title {
             font-size: 14pt;
             font-weight: bold;
@@ -241,63 +244,63 @@
             border-bottom: 1px solid #eee;
             padding-bottom: 3px;
         }
-        
+
         .data-row {
             display: flex;
             margin-bottom: 3mm;
         }
-        
+
         .data-label {
             font-weight: bold;
             width: 40mm;
         }
-        
+
         .data-value {
             flex: 1;
             border-bottom: 1px dotted #ccc;
             min-height: 6mm;
         }
-        
+
         .items-pdf-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 5mm;
         }
-        
+
         .items-pdf-table th {
             background-color: #f2f2f2;
             padding: 3mm;
             text-align: left;
             border: 1px solid #ddd;
         }
-        
+
         .items-pdf-table td {
             padding: 3mm;
             border: 1px solid #ddd;
         }
-        
+
         .signature-section {
             margin-top: 15mm;
             text-align: center;
         }
-        
+
         .signature-line {
             width: 80mm;
             border-top: 1px solid #000;
             margin: 10mm auto 3mm;
         }
-        
+
         .signature-text {
             font-size: 11pt;
         }
-        
+
         .total-section {
             margin-top: 5mm;
             text-align: right;
             font-size: 14pt;
             font-weight: bold;
         }
-        
+
         .footer {
             text-align: center;
             font-size: 10pt;
@@ -306,7 +309,7 @@
             border-top: 1px solid #eee;
             padding-top: 3mm;
         }
-        
+
         /* Estilos para crédito */
         .credito-section {
             margin: 20px 0;
@@ -315,45 +318,45 @@
             border-radius: 8px;
             border-left: 4px solid #3498db;
         }
-        
+
         .credito-info {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
         }
-        
+
         .credito-label {
             font-weight: bold;
             color: #2c3e50;
         }
-        
+
         .credito-valor {
             font-size: 1.2rem;
             font-weight: bold;
             color: #27ae60;
         }
-        
+
         .credito-zero {
             color: #e74c3c;
         }
-        
+
         .credito-actions {
             display: flex;
             gap: 10px;
         }
-        
+
         .btn-credito {
             padding: 8px 15px;
             font-size: 0.9rem;
         }
-        
+
         .credito-detalhes {
             margin-top: 10px;
             font-size: 0.9rem;
             color: #666;
         }
-        
+
         /* Tabela de referência de preços */
         .referencia-precos {
             margin: 30px 0;
@@ -362,7 +365,7 @@
             border-radius: 8px;
             border-left: 4px solid #27ae60;
         }
-        
+
         .referencia-precos h2 {
             margin-top: 0;
             color: #2c3e50;
@@ -371,7 +374,7 @@
             align-items: center;
             gap: 10px;
         }
-        
+
         .precos-table {
             width: 100%;
             border-collapse: collapse;
@@ -379,9 +382,9 @@
             background-color: white;
             border-radius: 5px;
             overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        
+
         .precos-table th {
             background-color: #27ae60;
             color: white;
@@ -389,26 +392,26 @@
             text-align: left;
             font-weight: 600;
         }
-        
+
         .precos-table td {
             padding: 12px;
             border-bottom: 1px solid #eee;
         }
-        
+
         .precos-table tr:nth-child(even) {
             background-color: #f9f9f9;
         }
-        
+
         .precos-table tr:hover {
             background-color: #f0f7f0;
             cursor: pointer;
         }
-        
+
         .preco-valor {
             font-weight: bold;
             color: #27ae60;
         }
-        
+
         /* Botões de preço rápido */
         .precos-rapidos {
             margin: 10px 0;
@@ -416,7 +419,7 @@
             gap: 5px;
             flex-wrap: wrap;
         }
-        
+
         .btn-preco-rapido {
             padding: 8px 12px;
             background: #e3f2fd;
@@ -426,12 +429,12 @@
             font-size: 0.85rem;
             transition: all 0.2s;
         }
-        
+
         .btn-preco-rapido:hover {
             background: #bbdefb;
             transform: translateY(-1px);
         }
-        
+
         /* Estilos para checkboxes de controle - MODIFICADO */
         .controle-section {
             margin-top: 15mm;
@@ -441,7 +444,7 @@
             background-color: #f8f9fa;
             page-break-inside: avoid;
         }
-        
+
         .controle-title {
             font-size: 14pt;
             font-weight: bold;
@@ -449,7 +452,7 @@
             margin-bottom: 5mm;
             text-align: center;
         }
-        
+
         /* MODIFICAÇÃO AQUI: Usar flexbox com nowrap */
         .controle-grid {
             display: flex;
@@ -459,15 +462,16 @@
             flex-wrap: nowrap;
             page-break-inside: avoid;
         }
-        
+
         .checkbox-item {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-width: 0; /* Importante para não quebrar */
+            min-width: 0;
+            /* Importante para não quebrar */
         }
-        
+
         .checkbox-label {
             font-size: 11pt;
             margin-bottom: 2mm;
@@ -475,7 +479,7 @@
             color: #2c3e50;
             white-space: nowrap;
         }
-        
+
         .checkbox-box {
             width: 8mm;
             height: 8mm;
@@ -485,7 +489,7 @@
             position: relative;
             flex-shrink: 0;
         }
-        
+
         .checkbox-box.checked:before {
             content: "✓";
             position: absolute;
@@ -496,25 +500,25 @@
             font-weight: bold;
             color: #27ae60;
         }
-        
+
         .data-section-small {
             font-size: 9pt;
             color: #666;
             margin-top: 2mm;
             text-align: center;
         }
-        
+
         /* NOVAS REGRAS PARA IMPRESSÃO */
         @page {
             size: A4;
             margin: 15mm;
         }
-        
+
         .no-break {
             page-break-inside: avoid;
             break-inside: avoid;
         }
-        
+
         /* Estilos específicos para impressão - MODIFICADO */
         @media print {
             body * {
@@ -522,11 +526,12 @@
                 margin: 0;
                 padding: 0;
             }
-            
-            .print-section, .print-section * {
+
+            .print-section,
+            .print-section * {
                 visibility: visible;
             }
-            
+
             .print-section {
                 position: absolute;
                 left: 0;
@@ -537,11 +542,11 @@
                 box-shadow: none;
                 border: none;
             }
-            
+
             .no-print {
                 display: none !important;
             }
-            
+
             .pdf-view {
                 margin: 0 auto;
                 padding: 15mm;
@@ -552,24 +557,24 @@
                 page-break-after: always;
                 page-break-inside: avoid;
             }
-            
+
             .pdf-view:last-child {
                 page-break-after: auto;
             }
-            
+
             .via-section {
                 page-break-inside: avoid;
             }
-            
+
             .via-divider {
                 border-top: 2px dashed #ccc !important;
                 page-break-before: avoid;
             }
-            
+
             .referencia-precos {
                 display: none !important;
             }
-            
+
             /* CORREÇÃO PRINCIPAL: Garantir que os checkboxes fiquem na mesma linha */
             .controle-grid {
                 display: flex !important;
@@ -578,44 +583,44 @@
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
             }
-            
+
             .checkbox-item {
                 flex: 1 !important;
                 min-width: 55mm !important;
                 max-width: 60mm !important;
                 page-break-inside: avoid;
             }
-            
+
             /* Estilos para checkboxes na impressão */
             .checkbox-box {
                 border: 2px solid #000 !important;
             }
-            
+
             .checkbox-box.checked:before {
                 color: #000 !important;
             }
-            
+
             /* Forçar quebra de página antes da seção de controle se necessário */
             .controle-section {
                 page-break-inside: avoid;
                 page-break-before: auto;
             }
         }
-        
+
         /* Responsividade */
         @media (max-width: 768px) {
             .form-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .buttons-container {
                 flex-direction: column;
             }
-            
+
             .container {
                 padding: 15px;
             }
-            
+
             .pdf-view {
                 width: 100%;
                 padding: 10px;
@@ -623,32 +628,32 @@
                 transform: scale(0.8);
                 transform-origin: top center;
             }
-            
+
             .credito-info {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 10px;
             }
-            
+
             .credito-actions {
                 width: 100%;
                 flex-direction: column;
             }
-            
+
             .precos-rapidos {
                 flex-direction: column;
             }
-            
+
             .btn-preco-rapido {
                 width: 100%;
             }
-            
+
             .controle-grid {
                 flex-direction: column;
                 gap: 5mm;
             }
         }
-        
+
         @media (max-width: 480px) {
             .pdf-view {
                 transform: scale(0.7);
@@ -656,6 +661,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container no-print">
         <header>
@@ -663,7 +669,7 @@
             <p class="subtitle">Malharia - Controle de Pedidos e Encomendas</p>
             <p>Preencha o formulário abaixo para gerar o comprovante em PDF com duas vias.</p>
         </header>
-        
+
         <!-- Formulário de entrada -->
         <div class="form-section">
             <h2>📝 Dados Pessoais</h2>
@@ -690,7 +696,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="form-section">
             <h2>🏫 Dados da Escola (se aplicável)</h2>
             <div class="form-grid">
@@ -704,7 +710,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="form-section">
             <h2>👕 Itens da Encomenda</h2>
             <div class="form-grid">
@@ -745,10 +751,11 @@
                     <input type="text" id="item-price" placeholder="0,00">
                 </div>
             </div>
-            
+
             <!-- Botões de preço rápido -->
             <div style="margin: 15px 0;">
-                <div style="font-size: 0.9rem; color: #666; margin-bottom: 8px;">Preço rápido (clique para preencher):</div>
+                <div style="font-size: 0.9rem; color: #666; margin-bottom: 8px;">Preço rápido (clique para preencher):
+                </div>
                 <div class="precos-rapidos">
                     <button type="button" class="btn-preco-rapido" data-preco="25.95">Camiseta (R$ 25,95)</button>
                     <button type="button" class="btn-preco-rapido" data-preco="41.18">Bermuda (R$ 41,18)</button>
@@ -757,12 +764,12 @@
                     <button type="button" class="btn-preco-rapido" data-preco="282.99">Uniforme KIT (R$ 282,99)</button>
                 </div>
             </div>
-            
+
             <div class="buttons-container">
                 <button id="add-item-btn" class="btn btn-success">➕ Adicionar Item</button>
                 <button id="clear-items-btn" class="btn btn-secondary">🗑️ Limpar Todos os Itens</button>
             </div>
-            
+
             <table class="items-table">
                 <thead>
                     <tr>
@@ -795,7 +802,7 @@
                     </tr>
                 </tfoot>
             </table>
-            
+
             <!-- Seção de Crédito -->
             <div class="credito-section">
                 <div class="credito-info">
@@ -817,16 +824,17 @@
                 </div>
                 <div class="credito-detalhes">
                     <p id="credito-mensagem">Este cliente não possui crédito disponível.</p>
-                    <p id="credito-restante" style="display: none;">Após usar crédito, restará: <strong id="credito-restante-valor">R$ 0,00</strong></p>
+                    <p id="credito-restante" style="display: none;">Após usar crédito, restará: <strong
+                            id="credito-restante-valor">R$ 0,00</strong></p>
                 </div>
             </div>
         </div>
-        
+
         <!-- Seção de Referência de Preços -->
         <div class="referencia-precos no-print">
             <h2>📋 Tabela de Referência de Preços</h2>
             <p>Use esta tabela como referência para os preços padrão (não aparece no comprovante):</p>
-            
+
             <table class="precos-table">
                 <thead>
                     <tr>
@@ -839,18 +847,19 @@
                     <!-- Os preços serão carregados via JavaScript -->
                 </tbody>
             </table>
-            
+
             <div style="margin-top: 15px; font-size: 0.9rem; color: #666;">
-                <p><strong>Dica:</strong> Clique em qualquer linha da tabela para preencher automaticamente o preço no formulário acima.</p>
+                <p><strong>Dica:</strong> Clique em qualquer linha da tabela para preencher automaticamente o preço no
+                    formulário acima.</p>
             </div>
         </div>
-        
+
         <div class="buttons-container">
             <button id="print-btn" class="btn btn-primary">🖨️ Imprimir Comprovante</button>
             <button id="preview-btn" class="btn btn-secondary">👁️ Visualizar Prévia</button>
             <button id="clear-form-btn" class="btn btn-secondary">🧹 Limpar Formulário</button>
         </div>
-        
+
         <!-- Prévia do PDF (inicialmente escondida) -->
         <div id="preview-container" class="hidden no-print">
             <div class="form-section">
@@ -865,17 +874,20 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Container para impressão -->
     <div id="print-container" class="print-section"></div>
-    
+
     <!-- Modal para ajustar crédito -->
-    <div id="modal-credito" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
-        <div class="modal-content" style="background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 400px;">
+    <div id="modal-credito" class="modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content"
+            style="background: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 400px;">
             <h3 style="margin-top: 0; color: #2c3e50;">Ajustar Crédito do Cliente</h3>
             <div class="form-group">
                 <label for="novo-credito">Novo Valor de Crédito (R$)</label>
-                <input type="text" id="novo-credito" placeholder="0,00" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                <input type="text" id="novo-credito" placeholder="0,00"
+                    style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
             </div>
             <div id="modal-mensagem" style="margin: 10px 0; padding: 10px; border-radius: 4px; display: none;"></div>
             <div style="display: flex; gap: 10px; margin-top: 20px;">
@@ -884,14 +896,14 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         // Dados da encomenda
         let orderItems = [];
         let orderId = Math.floor(1000 + Math.random() * 9000);
         let creditoUsado = 0;
         let creditoDisponivel = 0;
-        
+
         // Elementos do formulário
         const customerNameInput = document.getElementById('customer-name');
         const customerCpfInput = document.getElementById('customer-cpf');
@@ -904,7 +916,7 @@
         const itemSizeSelect = document.getElementById('item-size');
         const itemQuantityInput = document.getElementById('item-quantity');
         const itemPriceInput = document.getElementById('item-price');
-        
+
         // Elementos de crédito
         const creditoDisponivelSpan = document.getElementById('credito-disponivel');
         const creditoUsadoCell = document.getElementById('credito-usado');
@@ -915,7 +927,7 @@
         const creditoMensagem = document.getElementById('credito-mensagem');
         const creditoRestanteDiv = document.getElementById('credito-restante');
         const creditoRestanteValor = document.getElementById('credito-restante-valor');
-        
+
         // Botões
         const addItemBtn = document.getElementById('add-item-btn');
         const clearItemsBtn = document.getElementById('clear-items-btn');
@@ -924,30 +936,30 @@
         const clearFormBtn = document.getElementById('clear-form-btn');
         const closePreviewBtn = document.getElementById('close-preview-btn');
         const printPreviewBtn = document.getElementById('print-preview-btn');
-        
+
         // Elementos do modal
         const modalCredito = document.getElementById('modal-credito');
         const novoCreditoInput = document.getElementById('novo-credito');
         const cancelarCreditoBtn = document.getElementById('cancelar-credito-btn');
         const confirmarCreditoBtn = document.getElementById('confirmar-credito-btn');
         const modalMensagem = document.getElementById('modal-mensagem');
-        
+
         // Tabela de itens
         const itemsList = document.getElementById('items-list');
         const totalAmountCell = document.getElementById('total-amount');
-        
+
         // Tabela de preços
         const tabelaPrecos = document.getElementById('tabela-precos');
-        
+
         // Containers
         const previewContainer = document.getElementById('preview-container');
         const pdfPreview = document.getElementById('pdf-preview');
         const printContainer = document.getElementById('print-container');
-        
+
         // Configurar data atual como padrão
         const today = new Date().toISOString().split('T')[0];
         orderDateInput.value = today;
-        
+
         // Tabela de referência de preços
         const precosReferencia = [
             { item: 'Camiseta', valor: 25.95, sugestao: 'Camiseta básica' },
@@ -956,7 +968,7 @@
             { item: 'Casaco', valor: 70.13, sugestao: 'Casaco moletom' },
             { item: 'Uniforme KIT', valor: 282.99, sugestao: 'Kit completo' }
         ];
-        
+
         // Função para formatar valores monetários
         function formatCurrency(value) {
             return new Intl.NumberFormat('pt-BR', {
@@ -966,45 +978,45 @@
                 maximumFractionDigits: 2
             }).format(value);
         }
-        
+
         // Função para converter string de preço para número
         function parsePrice(priceString) {
             if (!priceString) return 0;
-            
+
             let cleanString = priceString.toString()
                 .replace('R$', '')
                 .replace(/\./g, '')
                 .replace(',', '.')
                 .trim();
-            
+
             let number = parseFloat(cleanString);
             return isNaN(number) ? 0 : number;
         }
-        
+
         // Função para formatar preço para exibição
         function formatPrice(value) {
             if (typeof value === 'number') {
                 return formatCurrency(value);
             }
-            
+
             if (typeof value === 'string') {
                 let number = parsePrice(value);
                 return formatCurrency(number);
             }
-            
+
             return formatCurrency(0);
         }
-        
+
         // Função para formatar input de valores monetários
         function formatInputCurrency(value) {
             if (typeof value === 'number') {
                 return value.toFixed(2).replace('.', ',');
             }
-            
+
             let number = parsePrice(value);
             return number.toFixed(2).replace('.', ',');
         }
-        
+
         // Função para calcular o total
         function calculateTotal() {
             let total = 0;
@@ -1013,22 +1025,22 @@
             });
             return total;
         }
-        
+
         // Função para calcular o total final (total - crédito usado)
         function calculateTotalFinal() {
             const total = calculateTotal();
             const final = Math.max(0, total - creditoUsado);
             return final;
         }
-        
+
         // Função para atualizar o crédito disponível
         function updateCreditoDisponivel() {
             const novoCredito = parsePrice(customerCreditoInput.value);
             creditoDisponivel = novoCredito;
-            
+
             // Atualizar exibição
             creditoDisponivelSpan.textContent = formatCurrency(creditoDisponivel);
-            
+
             if (creditoDisponivel > 0) {
                 creditoDisponivelSpan.className = 'credito-valor';
                 creditoMensagem.textContent = `Cliente possui R$ ${formatCurrency(creditoDisponivel).replace('R$', '')} em crédito disponível.`;
@@ -1038,24 +1050,24 @@
                 creditoMensagem.textContent = 'Este cliente não possui crédito disponível.';
                 usarCreditoBtn.disabled = true;
             }
-            
+
             updateCreditoUsado();
         }
-        
+
         // Função para atualizar o crédito usado
         function updateCreditoUsado() {
             const total = calculateTotal();
-            
+
             // Atualizar células da tabela
             totalAmountCell.textContent = formatCurrency(total);
             creditoUsadoCell.textContent = formatCurrency(creditoUsado);
-            
+
             const totalFinal = calculateTotalFinal();
             totalFinalCell.textContent = formatCurrency(totalFinal);
-            
+
             // Atualizar botões
             limparCreditoBtn.disabled = creditoUsado === 0;
-            
+
             // Atualizar mensagem de crédito restante
             if (creditoUsado > 0) {
                 const creditoRestante = creditoDisponivel - creditoUsado;
@@ -1065,36 +1077,36 @@
                 creditoRestanteDiv.style.display = 'none';
             }
         }
-        
+
         // Função para usar crédito
         function usarCredito() {
             const total = calculateTotal();
-            
+
             if (total === 0) {
                 alert('Adicione itens à encomenda antes de usar crédito.');
                 return;
             }
-            
+
             if (creditoDisponivel === 0) {
                 alert('Este cliente não possui crédito disponível.');
                 return;
             }
-            
+
             // Usar o mínimo entre crédito disponível e total
             creditoUsado = Math.min(creditoDisponivel, total);
             updateCreditoUsado();
-            
+
             // Feedback visual
             alert(`Crédito de ${formatCurrency(creditoUsado)} aplicado na encomenda!`);
         }
-        
+
         // Função para limpar uso de crédito
         function limparCredito() {
             creditoUsado = 0;
             updateCreditoUsado();
             alert('Uso de crédito removido!');
         }
-        
+
         // Função para abrir modal de ajuste de crédito
         function abrirModalCredito() {
             novoCreditoInput.value = customerCreditoInput.value;
@@ -1102,16 +1114,16 @@
             novoCreditoInput.focus();
             modalMensagem.style.display = 'none';
         }
-        
+
         // Função para fechar modal de crédito
         function fecharModalCredito() {
             modalCredito.style.display = 'none';
         }
-        
+
         // Função para confirmar ajuste de crédito
         function confirmarAjusteCredito() {
             const novoValor = parsePrice(novoCreditoInput.value);
-            
+
             if (novoValor < 0) {
                 modalMensagem.style.display = 'block';
                 modalMensagem.style.backgroundColor = 'rgba(231, 76, 60, 0.1)';
@@ -1120,60 +1132,60 @@
                 modalMensagem.textContent = 'O valor do crédito não pode ser negativo.';
                 return;
             }
-            
+
             customerCreditoInput.value = formatPrice(novoValor).replace('R$', '').trim();
             updateCreditoDisponivel();
             fecharModalCredito();
-            
+
             // Feedback
             alert(`Crédito atualizado para ${formatCurrency(novoValor)}!`);
         }
-        
+
         // Função para carregar a tabela de referência de preços
         function carregarTabelaPrecos() {
             tabelaPrecos.innerHTML = '';
-            
+
             precosReferencia.forEach(preco => {
                 const row = document.createElement('tr');
                 row.title = 'Clique para usar este preço no formulário';
-                
+
                 row.addEventListener('click', () => {
                     // Preenche automaticamente o campo de preço
                     itemPriceInput.value = formatInputCurrency(preco.valor);
-                    
+
                     // Destaque visual
                     row.style.backgroundColor = '#e8f5e9';
                     setTimeout(() => {
                         row.style.backgroundColor = '';
                     }, 1000);
-                    
+
                     // Foca no campo de quantidade para facilitar
                     itemQuantityInput.focus();
                 });
-                
+
                 row.innerHTML = `
                     <td><strong>${preco.item}</strong></td>
                     <td class="preco-valor">${formatCurrency(preco.valor)}</td>
                     <td>${preco.sugestao}</td>
                 `;
-                
+
                 tabelaPrecos.appendChild(row);
             });
         }
-        
+
         // Função para buscar preço por tipo de item
         function buscarPrecoPorTipo(tipo) {
-            const item = precosReferencia.find(p => 
-                p.item.toLowerCase().includes(tipo.toLowerCase()) || 
+            const item = precosReferencia.find(p =>
+                p.item.toLowerCase().includes(tipo.toLowerCase()) ||
                 tipo.toLowerCase().includes(p.item.toLowerCase())
             );
             return item ? item.valor : 0;
         }
-        
+
         // Função para atualizar a tabela de itens
         function updateItemsTable() {
             itemsList.innerHTML = '';
-            
+
             if (orderItems.length === 0) {
                 const row = document.createElement('tr');
                 row.innerHTML = `<td colspan="6" style="text-align: center; color: #7f8c8d;">Nenhum item adicionado ainda</td>`;
@@ -1181,11 +1193,11 @@
                 updateCreditoUsado();
                 return;
             }
-            
+
             orderItems.forEach((item, index) => {
                 const row = document.createElement('tr');
                 const subtotal = item.quantity * item.price;
-                
+
                 row.innerHTML = `
                     <td>${item.type}</td>
                     <td>${item.size}</td>
@@ -1196,69 +1208,69 @@
                         <button class="btn btn-danger" onclick="removeItem(${index})">Remover</button>
                     </td>
                 `;
-                
+
                 itemsList.appendChild(row);
             });
-            
+
             updateCreditoUsado();
         }
-        
+
         // Função para adicionar um item
         function addItem() {
             const type = itemTypeSelect.value;
             const size = itemSizeSelect.value;
             const quantity = parseInt(itemQuantityInput.value);
-            
+
             // Obter e processar o preço
             let priceStr = itemPriceInput.value || '0';
             const price = parsePrice(priceStr);
-            
+
             if (!type || !size || !quantity) {
                 alert('Por favor, preencha pelo menos o tipo, tamanho e quantidade do item.');
                 return;
             }
-            
+
             if (quantity < 1) {
                 alert('A quantidade deve ser pelo menos 1.');
                 return;
             }
-            
+
             const newItem = {
                 type,
                 size,
                 quantity,
                 price
             };
-            
+
             orderItems.push(newItem);
             updateItemsTable();
-            
+
             // Limpar os campos do item
             itemTypeSelect.value = '';
             itemSizeSelect.value = '';
             itemQuantityInput.value = '1';
             itemPriceInput.value = '0,00';
-            
+
             // Focar no tipo de peça para próximo item
             itemTypeSelect.focus();
         }
-        
+
         // Função para remover um item
-        window.removeItem = function(index) {
+        window.removeItem = function (index) {
             orderItems.splice(index, 1);
             updateItemsTable();
         };
-        
+
         // Função para limpar todos os itens
         function clearAllItems() {
             if (orderItems.length === 0) return;
-            
+
             if (confirm('Tem certeza que deseja remover todos os itens?')) {
                 orderItems = [];
                 updateItemsTable();
             }
         }
-        
+
         // Função para limpar o formulário
         function clearForm() {
             if (confirm('Tem certeza que deseja limpar todo o formulário?')) {
@@ -1273,43 +1285,43 @@
                 itemSizeSelect.value = '';
                 itemQuantityInput.value = '1';
                 itemPriceInput.value = '0,00';
-                
+
                 orderItems = [];
                 creditoUsado = 0;
                 updateCreditoDisponivel();
                 updateItemsTable();
-                
+
                 // Fechar prévia se estiver aberta
                 previewContainer.classList.add('hidden');
-                
+
                 // Focar no primeiro campo
                 customerNameInput.focus();
             }
         }
-        
+
         // Função para gerar o template do comprovante - MODIFICADA
         function generateTemplate(targetElement) {
             // Formatar data
             const orderDate = orderDateInput.value;
             const formattedDate = orderDate ? new Date(orderDate).toLocaleDateString('pt-BR') : '';
-            
+
             // Calcular totais
             const total = calculateTotal();
             const totalFinal = calculateTotalFinal();
-            
+
             // Limpar o elemento alvo
             targetElement.innerHTML = '';
-            
+
             // Criar template principal
             const template = document.createElement('div');
             template.className = 'pdf-view no-break';
-            
+
             // Gerar conteúdo das vias
             let viasHtml = '';
-            
+
             for (let via = 1; via <= 2; via++) {
                 const isViaMalharia = via === 2;
-                
+
                 viasHtml += `
                     <div class="via-section no-break">
                         <div class="via-title">${isViaMalharia ? 'VIA DA MALHARIA' : 'VIA DO CLIENTE'}</div>
@@ -1381,8 +1393,8 @@
                                 </thead>
                                 <tbody>
                                     ${orderItems.map(item => {
-                                        const subtotal = item.quantity * item.price;
-                                        return `
+                    const subtotal = item.quantity * item.price;
+                    return `
                                             <tr>
                                                 <td>${item.type}</td>
                                                 <td>${item.size}</td>
@@ -1391,7 +1403,7 @@
                                                 <td>${formatCurrency(subtotal)}</td>
                                             </tr>
                                         `;
-                                    }).join('')}
+                }).join('')}
                                 </tbody>
                             </table>
                             
@@ -1425,6 +1437,11 @@
                         </div>
                         ` : ''}
                         
+                        <div class="signature-section">
+                            <div class="signature-line"></div>
+                            <div class="signature-text">Assinatura</div>
+                         </div>
+
                         ${isViaMalharia ? `
                         <!-- Seção de Controle Interno (apenas na via da malharia) - MODIFICADA -->
                         <div class="controle-section no-break">
@@ -1455,25 +1472,15 @@
                             </div>
                         </div>
                         ` : ''}
-
-                        <div class="signature-section">
-                            <div class="signature-line"></div>
-                            <div class="signature-text">Assinatura</div>
-                        </div>
                 `;
-                
-                // Adicionar divisor entre as vias (exceto após a última)
-                if (via < 2) {
-                    viasHtml += '<div class="via-divider">CORTAR AQUI</div>';
-                }
             }
-            
+
             template.innerHTML = viasHtml;
             targetElement.appendChild(template);
-            
+
             return template;
         }
-        
+
         // Função para visualizar prévia
         function showPreview() {
             if (!customerNameInput.value.trim()) {
@@ -1481,13 +1488,13 @@
                 customerNameInput.focus();
                 return;
             }
-            
+
             generateTemplate(pdfPreview);
             previewContainer.classList.remove('hidden');
             // Rolagem suave até a prévia
             previewContainer.scrollIntoView({ behavior: 'smooth' });
         }
-        
+
         // Função para imprimir o comprovante
         function printComprovante() {
             if (!customerNameInput.value.trim()) {
@@ -1495,91 +1502,91 @@
                 customerNameInput.focus();
                 return;
             }
-            
+
             if (orderItems.length === 0) {
                 alert('Por favor, adicione pelo menos um item à encomenda.');
                 return;
             }
-            
+
             // Gerar template para impressão
             generateTemplate(printContainer);
-            
+
             // Aguardar um momento para o DOM ser atualizado
             setTimeout(() => {
                 // Abrir diálogo de impressão
                 window.print();
-                
+
                 // Incrementar ID para próxima encomenda
                 orderId++;
-                
+
                 // Limpar o container de impressão após um tempo
                 setTimeout(() => {
                     printContainer.innerHTML = '';
                 }, 500);
             }, 100);
         }
-        
+
         // Função para imprimir a prévia
         function printPreview() {
             // Gerar template para impressão
             generateTemplate(printContainer);
-            
+
             // Aguardar um momento para o DOM ser atualizado
             setTimeout(() => {
                 // Abrir diálogo de impressão
                 window.print();
-                
+
                 // Limpar o container de impressão após um tempo
                 setTimeout(() => {
                     printContainer.innerHTML = '';
                 }, 500);
             }, 100);
         }
-        
+
         // Event Listeners
         addItemBtn.addEventListener('click', addItem);
-        
+
         clearItemsBtn.addEventListener('click', clearAllItems);
-        
+
         printBtn.addEventListener('click', printComprovante);
-        
+
         previewBtn.addEventListener('click', showPreview);
-        
+
         clearFormBtn.addEventListener('click', clearForm);
-        
+
         closePreviewBtn.addEventListener('click', () => {
             previewContainer.classList.add('hidden');
         });
-        
+
         printPreviewBtn.addEventListener('click', printPreview);
-        
+
         // Event Listeners para crédito
         usarCreditoBtn.addEventListener('click', usarCredito);
         limparCreditoBtn.addEventListener('click', limparCredito);
         ajustarCreditoBtn.addEventListener('click', abrirModalCredito);
         cancelarCreditoBtn.addEventListener('click', fecharModalCredito);
         confirmarCreditoBtn.addEventListener('click', confirmarAjusteCredito);
-        
+
         // Event listener para tipo de item (auto-sugestão de preço)
-        itemTypeSelect.addEventListener('change', function() {
+        itemTypeSelect.addEventListener('change', function () {
             const tipoSelecionado = this.value;
-            
+
             if (tipoSelecionado) {
                 const precoSugerido = buscarPrecoPorTipo(tipoSelecionado);
-                
+
                 if (precoSugerido > 0 && (!itemPriceInput.value || parsePrice(itemPriceInput.value) === 0)) {
                     // Só preenche se o campo estiver vazio ou com zero
                     itemPriceInput.value = formatInputCurrency(precoSugerido);
                 }
             }
         });
-        
+
         // Botões de preço rápido
         document.querySelectorAll('.btn-preco-rapido').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 const preco = parseFloat(this.getAttribute('data-preco'));
                 itemPriceInput.value = formatInputCurrency(preco);
-                
+
                 // Feedback visual
                 const originalBackground = this.style.backgroundColor;
                 const originalColor = this.style.color;
@@ -1591,45 +1598,45 @@
                 }, 500);
             });
         });
-        
+
         // Fechar modal ao clicar fora
-        modalCredito.addEventListener('click', function(e) {
+        modalCredito.addEventListener('click', function (e) {
             if (e.target === this) {
                 fecharModalCredito();
             }
         });
-        
+
         // Fechar modal com ESC
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape' && modalCredito.style.display === 'flex') {
                 fecharModalCredito();
             }
         });
-        
+
         // Permitir adicionar item com Enter
         itemQuantityInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 addItem();
             }
         });
-        
+
         itemPriceInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 addItem();
             }
         });
-        
+
         // Atualizar crédito quando o campo mudar
         customerCreditoInput.addEventListener('input', updateCreditoDisponivel);
-        
+
         // Máscara para CPF
-        customerCpfInput.addEventListener('input', function(e) {
+        customerCpfInput.addEventListener('input', function (e) {
             let value = e.target.value.replace(/\D/g, '');
-            
+
             if (value.length > 11) {
                 value = value.substring(0, 11);
             }
-            
+
             if (value.length > 9) {
                 value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, '$1.$2.$3-$4');
             } else if (value.length > 6) {
@@ -1637,18 +1644,18 @@
             } else if (value.length > 3) {
                 value = value.replace(/^(\d{3})(\d{1,3}).*/, '$1.$2');
             }
-            
+
             e.target.value = value;
         });
-        
+
         // Máscara para telefone
-        customerPhoneInput.addEventListener('input', function(e) {
+        customerPhoneInput.addEventListener('input', function (e) {
             let value = e.target.value.replace(/\D/g, '');
-            
+
             if (value.length > 11) {
                 value = value.substring(0, 11);
             }
-            
+
             if (value.length > 10) {
                 value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
             } else if (value.length > 6) {
@@ -1658,19 +1665,19 @@
             } else if (value.length > 0) {
                 value = value.replace(/^(\d{0,2})/, '($1');
             }
-            
+
             e.target.value = value;
         });
-        
+
         // Valor padrão para campos
         customerCreditoInput.value = '0,00';
         itemPriceInput.value = '0,00';
-        
+
         // Inicializar crédito e tabela
         updateCreditoDisponivel();
         updateItemsTable();
         carregarTabelaPrecos();
-        
+
         // Exibir mensagem de status
         console.log('Sistema de Encomendas - Malharia');
         console.log('✅ Sistema carregado com sucesso!');
@@ -1685,4 +1692,5 @@
         console.log('✅ Pronto para uso!');
     </script>
 </body>
+
 </html>
