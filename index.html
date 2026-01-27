@@ -354,7 +354,154 @@
             color: #666;
         }
         
-        /* Estilos específicos para impressão */
+        /* Tabela de referência de preços */
+        .referencia-precos {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .referencia-precos h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .precos-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: white;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .precos-table th {
+            background-color: #27ae60;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .precos-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .precos-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .precos-table tr:hover {
+            background-color: #f0f7f0;
+            cursor: pointer;
+        }
+        
+        .preco-valor {
+            font-weight: bold;
+            color: #27ae60;
+        }
+        
+        /* Botões de preço rápido */
+        .precos-rapidos {
+            margin: 10px 0;
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-preco-rapido {
+            padding: 8px 12px;
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        
+        .btn-preco-rapido:hover {
+            background: #bbdefb;
+            transform: translateY(-1px);
+        }
+        
+        /* Estilos para checkboxes de controle */
+        .controle-section {
+            margin-top: 15mm;
+            padding: 5mm;
+            border: 2px solid #4a6fa5;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        
+        .controle-title {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5mm;
+            text-align: center;
+        }
+        
+        .controle-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 5mm;
+            text-align: center;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .checkbox-label {
+            font-size: 11pt;
+            margin-bottom: 2mm;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .checkbox-box {
+            width: 8mm;
+            height: 8mm;
+            border: 2px solid #4a6fa5;
+            border-radius: 2px;
+            position: relative;
+        }
+        
+        .checkbox-box:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 6mm;
+            font-weight: bold;
+            color: #27ae60;
+            opacity: 0;
+        }
+        
+        .checkbox-box.print-checkbox:before {
+            content: "✓";
+            opacity: 0;
+        }
+        
+        .data-section-small {
+            font-size: 10pt;
+            color: #666;
+            margin-top: 3mm;
+            text-align: center;
+        }
+        
+        /* Estilos específicos para impressão - CORRIGIDOS */
         @media print {
             body * {
                 visibility: hidden;
@@ -389,6 +536,7 @@
                 width: 210mm;
                 height: 297mm;
                 page-break-after: always;
+                position: relative;
             }
             
             .pdf-view:last-child {
@@ -397,6 +545,38 @@
             
             .via-divider {
                 border-top: 2px dashed #ccc !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            
+            .referencia-precos {
+                display: none !important;
+            }
+            
+            /* IMPORTANTE: Garantir que os checkboxes apareçam */
+            .checkbox-box {
+                display: block !important;
+                visibility: visible !important;
+                border: 2px solid #4a6fa5 !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            
+            .controle-section {
+                border: 2px solid #4a6fa5 !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            
+            /* Forçar todas as cores a aparecerem */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            
+            /* Garantir que tudo na via da malharia seja visível */
+            .via-section * {
+                visibility: visible !important;
             }
         }
         
@@ -431,6 +611,19 @@
             .credito-actions {
                 width: 100%;
                 flex-direction: column;
+            }
+            
+            .precos-rapidos {
+                flex-direction: column;
+            }
+            
+            .btn-preco-rapido {
+                width: 100%;
+            }
+            
+            .controle-grid {
+                grid-template-columns: 1fr;
+                gap: 3mm;
             }
         }
         
@@ -531,6 +724,18 @@
                 </div>
             </div>
             
+            <!-- Botões de preço rápido -->
+            <div style="margin: 15px 0;">
+                <div style="font-size: 0.9rem; color: #666; margin-bottom: 8px;">Preço rápido (clique para preencher):</div>
+                <div class="precos-rapidos">
+                    <button type="button" class="btn-preco-rapido" data-preco="25.95">Camiseta (R$ 25,95)</button>
+                    <button type="button" class="btn-preco-rapido" data-preco="41.18">Bermuda (R$ 41,18)</button>
+                    <button type="button" class="btn-preco-rapido" data-preco="52.65">Calça (R$ 52,65)</button>
+                    <button type="button" class="btn-preco-rapido" data-preco="70.13">Casaco (R$ 70,13)</button>
+                    <button type="button" class="btn-preco-rapido" data-preco="282.99">Uniforme KIT (R$ 282,99)</button>
+                </div>
+            </div>
+            
             <div class="buttons-container">
                 <button id="add-item-btn" class="btn btn-success">➕ Adicionar Item</button>
                 <button id="clear-items-btn" class="btn btn-secondary">🗑️ Limpar Todos os Itens</button>
@@ -578,13 +783,13 @@
                     </div>
                     <div class="credito-actions">
                         <button id="usar-credito-btn" class="btn btn-info btn-credito" disabled>
-                            <i class="fas fa-money-bill-wave"></i> Usar Crédito
+                            Usar Crédito
                         </button>
                         <button id="limpar-credito-btn" class="btn btn-secondary btn-credito" disabled>
-                            <i class="fas fa-undo"></i> Limpar Uso
+                            Limpar Uso
                         </button>
                         <button id="ajustar-credito-btn" class="btn btn-success btn-credito">
-                            <i class="fas fa-edit"></i> Ajustar Crédito
+                            Ajustar Crédito
                         </button>
                     </div>
                 </div>
@@ -592,6 +797,29 @@
                     <p id="credito-mensagem">Este cliente não possui crédito disponível.</p>
                     <p id="credito-restante" style="display: none;">Após usar crédito, restará: <strong id="credito-restante-valor">R$ 0,00</strong></p>
                 </div>
+            </div>
+        </div>
+        
+        <!-- Seção de Referência de Preços -->
+        <div class="referencia-precos no-print">
+            <h2>📋 Tabela de Referência de Preços</h2>
+            <p>Use esta tabela como referência para os preços padrão (não aparece no comprovante):</p>
+            
+            <table class="precos-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Valor Padrão (R$)</th>
+                        <th>Sugestão para Encomenda</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-precos">
+                    <!-- Os preços serão carregados via JavaScript -->
+                </tbody>
+            </table>
+            
+            <div style="margin-top: 15px; font-size: 0.9rem; color: #666;">
+                <p><strong>Dica:</strong> Clique em qualquer linha da tabela para preencher automaticamente o preço no formulário acima.</p>
             </div>
         </div>
         
@@ -686,6 +914,9 @@
         const itemsList = document.getElementById('items-list');
         const totalAmountCell = document.getElementById('total-amount');
         
+        // Tabela de preços
+        const tabelaPrecos = document.getElementById('tabela-precos');
+        
         // Containers
         const previewContainer = document.getElementById('preview-container');
         const pdfPreview = document.getElementById('pdf-preview');
@@ -694,6 +925,15 @@
         // Configurar data atual como padrão
         const today = new Date().toISOString().split('T')[0];
         orderDateInput.value = today;
+        
+        // Tabela de referência de preços
+        const precosReferencia = [
+            { item: 'Camiseta', valor: 25.95, sugestao: 'Camiseta básica' },
+            { item: 'Bermuda', valor: 41.18, sugestao: 'Bermuda jeans' },
+            { item: 'Calça', valor: 52.65, sugestao: 'Calça jeans/tactel' },
+            { item: 'Casaco', valor: 70.13, sugestao: 'Casaco moletom' },
+            { item: 'Uniforme KIT', valor: 282.99, sugestao: 'Kit completo' }
+        ];
         
         // Função para formatar valores monetários
         function formatCurrency(value) {
@@ -731,6 +971,16 @@
             }
             
             return formatCurrency(0);
+        }
+        
+        // Função para formatar input de valores monetários
+        function formatInputCurrency(value) {
+            if (typeof value === 'number') {
+                return value.toFixed(2).replace('.', ',');
+            }
+            
+            let number = parsePrice(value);
+            return number.toFixed(2).replace('.', ',');
         }
         
         // Função para calcular o total
@@ -855,6 +1105,47 @@
             
             // Feedback
             alert(`Crédito atualizado para ${formatCurrency(novoValor)}!`);
+        }
+        
+        // Função para carregar a tabela de referência de preços
+        function carregarTabelaPrecos() {
+            tabelaPrecos.innerHTML = '';
+            
+            precosReferencia.forEach(preco => {
+                const row = document.createElement('tr');
+                row.title = 'Clique para usar este preço no formulário';
+                
+                row.addEventListener('click', () => {
+                    // Preenche automaticamente o campo de preço
+                    itemPriceInput.value = formatInputCurrency(preco.valor);
+                    
+                    // Destaque visual
+                    row.style.backgroundColor = '#e8f5e9';
+                    setTimeout(() => {
+                        row.style.backgroundColor = '';
+                    }, 1000);
+                    
+                    // Foca no campo de quantidade para facilitar
+                    itemQuantityInput.focus();
+                });
+                
+                row.innerHTML = `
+                    <td><strong>${preco.item}</strong></td>
+                    <td class="preco-valor">${formatCurrency(preco.valor)}</td>
+                    <td>${preco.sugestao}</td>
+                `;
+                
+                tabelaPrecos.appendChild(row);
+            });
+        }
+        
+        // Função para buscar preço por tipo de item
+        function buscarPrecoPorTipo(tipo) {
+            const item = precosReferencia.find(p => 
+                p.item.toLowerCase().includes(tipo.toLowerCase()) || 
+                tipo.toLowerCase().includes(p.item.toLowerCase())
+            );
+            return item ? item.valor : 0;
         }
         
         // Função para atualizar a tabela de itens
@@ -995,9 +1286,11 @@
             let viasHtml = '';
             
             for (let via = 1; via <= 2; via++) {
+                const isViaMalharia = via === 2;
+                
                 viasHtml += `
                     <div class="via-section">
-                        <div class="via-title">${via === 1 ? 'VIA DO CLIENTE' : 'VIA DA MALHARIA'}</div>
+                        <div class="via-title">${isViaMalharia ? 'VIA DA MALHARIA' : 'VIA DO CLIENTE'}</div>
                         
                         <div class="company-header">
                             <div class="company-name">IMPACTO PAPELARIA E MALHARIA</div>
@@ -1109,6 +1402,37 @@
                             </div>
                         </div>
                         ` : ''}
+                        
+                        ${isViaMalharia ? `
+                        <!-- Seção de Controle Interno (apenas na via da malharia) -->
+                        <div class="controle-section">
+                            <div class="controle-title">CONTROLE INTERNO - MALHARIA</div>
+                            <div class="controle-grid">
+                                <div class="checkbox-item">
+                                    <div class="checkbox-label">SEPARADO</div>
+                                    <div class="checkbox-box print-checkbox"></div>
+                                    <div class="data-section-small">Material separado</div>
+                                </div>
+                                <div class="checkbox-item">
+                                    <div class="checkbox-label">ENTREGUE</div>
+                                    <div class="checkbox-box print-checkbox"></div>
+                                    <div class="data-section-small">Cliente retirou</div>
+                                </div>
+                                <div class="checkbox-item">
+                                    <div class="checkbox-label">PAGO</div>
+                                    <div class="checkbox-box print-checkbox"></div>
+                                    <div class="data-section-small">Pagamento realizado</div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 5mm; padding: 3mm; border: 1px dashed #ccc; border-radius: 3px;">
+                                <div style="font-size: 10pt; color: #666; text-align: center;">
+                                    <strong>Observações:</strong> _________________________________________________________
+                                    <div style="margin-top: 2mm;">Data da entrega: ______/______/______</div>
+                                    <div>Responsável: _________________________</div>
+                                </div>
+                            </div>
+                        </div>
+                        ` : ''}
 
                         <div class="signature-section">
                             <div class="signature-line"></div>
@@ -1166,8 +1490,34 @@
             
             // Aguardar um momento para o DOM ser atualizado
             setTimeout(() => {
+                // Forçar o navegador a mostrar todas as cores na impressão
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    @media print {
+                        * {
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                            color-adjust: exact !important;
+                        }
+                        .checkbox-box {
+                            border: 2px solid #4a6fa5 !important;
+                            display: block !important;
+                            visibility: visible !important;
+                        }
+                        .controle-section {
+                            border: 2px solid #4a6fa5 !important;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+                
                 // Abrir diálogo de impressão
                 window.print();
+                
+                // Remover o estilo após a impressão
+                setTimeout(() => {
+                    style.remove();
+                }, 1000);
                 
                 // Incrementar ID para próxima encomenda
                 orderId++;
@@ -1186,8 +1536,34 @@
             
             // Aguardar um momento para o DOM ser atualizado
             setTimeout(() => {
+                // Forçar o navegador a mostrar todas as cores na impressão
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    @media print {
+                        * {
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                            color-adjust: exact !important;
+                        }
+                        .checkbox-box {
+                            border: 2px solid #4a6fa5 !important;
+                            display: block !important;
+                            visibility: visible !important;
+                        }
+                        .controle-section {
+                            border: 2px solid #4a6fa5 !important;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+                
                 // Abrir diálogo de impressão
                 window.print();
+                
+                // Remover o estilo após a impressão
+                setTimeout(() => {
+                    style.remove();
+                }, 1000);
                 
                 // Limpar o container de impressão após um tempo
                 setTimeout(() => {
@@ -1219,6 +1595,38 @@
         ajustarCreditoBtn.addEventListener('click', abrirModalCredito);
         cancelarCreditoBtn.addEventListener('click', fecharModalCredito);
         confirmarCreditoBtn.addEventListener('click', confirmarAjusteCredito);
+        
+        // Event listener para tipo de item (auto-sugestão de preço)
+        itemTypeSelect.addEventListener('change', function() {
+            const tipoSelecionado = this.value;
+            
+            if (tipoSelecionado) {
+                const precoSugerido = buscarPrecoPorTipo(tipoSelecionado);
+                
+                if (precoSugerido > 0 && (!itemPriceInput.value || parsePrice(itemPriceInput.value) === 0)) {
+                    // Só preenche se o campo estiver vazio ou com zero
+                    itemPriceInput.value = formatInputCurrency(precoSugerido);
+                }
+            }
+        });
+        
+        // Botões de preço rápido
+        document.querySelectorAll('.btn-preco-rapido').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const preco = parseFloat(this.getAttribute('data-preco'));
+                itemPriceInput.value = formatInputCurrency(preco);
+                
+                // Feedback visual
+                const originalBackground = this.style.backgroundColor;
+                const originalColor = this.style.color;
+                this.style.backgroundColor = '#4caf50';
+                this.style.color = 'white';
+                setTimeout(() => {
+                    this.style.backgroundColor = originalBackground;
+                    this.style.color = originalColor;
+                }, 500);
+            });
+        });
         
         // Fechar modal ao clicar fora
         modalCredito.addEventListener('click', function(e) {
@@ -1297,11 +1705,15 @@
         // Inicializar crédito e tabela
         updateCreditoDisponivel();
         updateItemsTable();
+        carregarTabelaPrecos();
         
         // Exibir mensagem de status
         console.log('Sistema de Encomendas - Malharia');
         console.log('✅ Sistema carregado com sucesso!');
         console.log('✅ Sistema de crédito implementado');
+        console.log('✅ Tabela de referência de preços adicionada');
+        console.log('✅ Seção de controle interno na via da malharia');
+        console.log('✅ Checkboxes idênticos na pré-visualização e impressão');
         console.log('✅ Tamanhos disponíveis: 4, 6, 8, 10, 12, 14, P, M, G, GG');
         console.log('✅ Funciona totalmente offline');
         console.log('✅ Sem dependências externas');
