@@ -173,6 +173,7 @@
             display: flex;
             gap: 15px;
             margin-top: 20px;
+            flex-wrap: wrap;
         }
 
         .hidden {
@@ -324,6 +325,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .credito-label {
@@ -344,6 +347,7 @@
         .credito-actions {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .btn-credito {
@@ -435,7 +439,7 @@
             transform: translateY(-1px);
         }
 
-        /* Estilos para checkboxes de controle - MODIFICADO */
+        /* Estilos para checkboxes de controle - NÃO UTILIZADO */
         .controle-section {
             margin-top: 15mm;
             padding: 5mm;
@@ -453,7 +457,6 @@
             text-align: center;
         }
 
-        /* MODIFICAÇÃO AQUI: Usar flexbox com nowrap */
         .controle-grid {
             display: flex;
             justify-content: space-between;
@@ -469,7 +472,6 @@
             flex-direction: column;
             align-items: center;
             min-width: 0;
-            /* Importante para não quebrar */
         }
 
         .checkbox-label {
@@ -485,9 +487,9 @@
             height: 8mm;
             border: 2px solid #4a6fa5;
             border-radius: 2px;
-            cursor: pointer;
             position: relative;
             flex-shrink: 0;
+            margin: 2px auto;
         }
 
         .checkbox-box.checked:before {
@@ -519,7 +521,7 @@
             break-inside: avoid;
         }
 
-        /* Estilos específicos para impressão - MODIFICADO */
+        /* Estilos específicos para impressão */
         @media print {
             body * {
                 visibility: hidden;
@@ -575,7 +577,6 @@
                 display: none !important;
             }
 
-            /* CORREÇÃO PRINCIPAL: Garantir que os checkboxes fiquem na mesma linha */
             .controle-grid {
                 display: flex !important;
                 justify-content: space-between !important;
@@ -591,7 +592,6 @@
                 page-break-inside: avoid;
             }
 
-            /* Estilos para checkboxes na impressão */
             .checkbox-box {
                 border: 2px solid #000 !important;
             }
@@ -600,7 +600,6 @@
                 color: #000 !important;
             }
 
-            /* Forçar quebra de página antes da seção de controle se necessário */
             .controle-section {
                 page-break-inside: avoid;
                 page-break-before: auto;
@@ -632,31 +631,10 @@
             .credito-info {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 10px;
             }
 
             .credito-actions {
                 width: 100%;
-                flex-direction: column;
-            }
-
-            .precos-rapidos {
-                flex-direction: column;
-            }
-
-            .btn-preco-rapido {
-                width: 100%;
-            }
-
-            .controle-grid {
-                flex-direction: column;
-                gap: 5mm;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .pdf-view {
-                transform: scale(0.7);
             }
         }
     </style>
@@ -1110,7 +1088,7 @@
 
         // Função para abrir modal de ajuste de crédito
         function abrirModalCredito() {
-            novoCreditoInput.value = customerCreditoInput.value;
+            novoCreditoInput.value = formatInputCurrency(parsePrice(customerCreditoInput.value));
             modalCredito.style.display = 'flex';
             novoCreditoInput.focus();
             modalMensagem.style.display = 'none';
@@ -1134,7 +1112,7 @@
                 return;
             }
 
-            customerCreditoInput.value = formatPrice(novoValor).replace('R$', '').trim();
+            customerCreditoInput.value = formatInputCurrency(novoValor);
             updateCreditoDisponivel();
             fecharModalCredito();
 
@@ -1300,11 +1278,11 @@
             }
         }
 
-        // Função para gerar o template do comprovante - MODIFICADA
+        // Função para gerar o template do comprovante - VERSÃO SEM CONTROLE INTERNO
         function generateTemplate(targetElement) {
             // Formatar data
             const orderDate = orderDateInput.value;
-            const formattedDate = orderDate ? new Date(orderDate).toLocaleDateString('pt-BR') : '';
+            const formattedDate = orderDate ? new Date(orderDate + 'T12:00:00').toLocaleDateString('pt-BR') : '';
 
             // Calcular totais
             const total = calculateTotal();
@@ -1313,17 +1291,15 @@
             // Limpar o elemento alvo
             targetElement.innerHTML = '';
 
-            // Criar template principal
-            const template = document.createElement('div');
-            template.className = 'pdf-view no-break';
-
-            // Gerar conteúdo das vias
-            let viasHtml = '';
-
+            // Gerar conteúdo das vias (2 vias)
             for (let via = 1; via <= 2; via++) {
                 const isViaMalharia = via === 2;
+                
+                // Criar template principal
+                const template = document.createElement('div');
+                template.className = 'pdf-view no-break';
 
-                viasHtml += `
+                template.innerHTML = `
                     <div class="via-section no-break">
                         <div class="via-title">${isViaMalharia ? 'VIA DA MALHARIA' : 'VIA DO CLIENTE'}</div>
                         
@@ -1441,45 +1417,12 @@
                         <div class="signature-section">
                             <div class="signature-line"></div>
                             <div class="signature-text">Assinatura</div>
-                         </div>
-
-                        ${isViaMalharia ? `
-                        <!-- Seção de Controle Interno (apenas na via da malharia) - MODIFICADA -->
-                        <div class="controle-section no-break">
-                            <div class="controle-title">CONTROLE INTERNO - MALHARIA</div>
-                            <div class="controle-grid" style="display: flex; justify-content: space-between; gap: 3mm; flex-wrap: nowrap;">
-                                <div class="checkbox-item" style="flex: 1; text-align: center; min-width: 0;">
-                                    <div class="checkbox-label">SEPARADO</div>
-                                    <div class="checkbox-box"></div>
-                                    <div class="data-section-small">Material separado</div>
-                                </div>
-                                <div class="checkbox-item" style="flex: 1; text-align: center; min-width: 0;">
-                                    <div class="checkbox-label">ENTREGUE</div>
-                                    <div class="checkbox-box"></div>
-                                    <div class="data-section-small">Cliente retirou</div>
-                                </div>
-                                <div class="checkbox-item" style="flex: 1; text-align: center; min-width: 0;">
-                                    <div class="checkbox-label">PAGO</div>
-                                    <div class="checkbox-box"></div>
-                                    <div class="data-section-small">Pagamento realizado</div>
-                                </div>
-                            </div>
-                            <div style="margin-top: 5mm; padding: 3mm; border: 1px dashed #ccc; border-radius: 3px;">
-                                <div style="font-size: 10pt; color: #666; text-align: center;">
-                                    <strong>Observações:</strong> _________________________________________________________
-                                    <div style="margin-top: 2mm;">Data da entrega: ______/______/______</div>
-                                    <div>Responsável: _________________________</div>
-                                </div>
-                            </div>
                         </div>
-                        ` : ''}
+                    </div>
                 `;
+
+                targetElement.appendChild(template);
             }
-
-            template.innerHTML = viasHtml;
-            targetElement.appendChild(template);
-
-            return template;
         }
 
         // Função para visualizar prévia
@@ -1518,7 +1461,7 @@
                 window.print();
 
                 // Incrementar ID para próxima encomenda
-                orderId++;
+                orderId = Math.floor(1000 + Math.random() * 9000);
 
                 // Limpar o container de impressão após um tempo
                 setTimeout(() => {
@@ -1684,12 +1627,10 @@
         console.log('✅ Sistema carregado com sucesso!');
         console.log('✅ Sistema de crédito implementado');
         console.log('✅ Tabela de referência de preços adicionada');
-        console.log('✅ Seção de controle interno na via da malharia');
-        console.log('✅ Checkboxes para: SEPARADO ✓ ENTREGUE ✓ PAGO ✓');
+        console.log('✅ Seção de controle interno removida');
         console.log('✅ Tamanhos disponíveis: 4, 6, 8, 10, 12, 14, P, M, G, GG');
         console.log('✅ Funciona totalmente offline');
         console.log('✅ Sem dependências externas');
-        console.log('✅ FIX: Checkboxes agora não quebram linha na impressão');
         console.log('✅ Pronto para uso!');
     </script>
 </body>
